@@ -1,0 +1,215 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvi78i7ieexns"]
+
+[ext_resource type="Script" path="res://UI.cs" id="1_8w7hb"]
+
+[node name="UI" type="Control" node_paths=PackedStringArray("statusLabel", "startButton", "speedInput", "timeInput", "pearlsButton", "pearlsPanel", "pearlsInput", "savePearlsButton")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8w7hb")
+statusLabel = NodePath("BottomPanel/HSplitContainer/Control2/StatusLabel")
+startButton = NodePath("BottomPanel/HSplitContainer/Control/StartButton")
+speedInput = NodePath("TopPanel/SpeedInput")
+timeInput = NodePath("TopPanel/TimeInput")
+pearlsButton = NodePath("TopPanel/PearlsButton")
+pearlsPanel = NodePath("PearlsPanel")
+pearlsInput = NodePath("PearlsPanel/PearlsInput")
+savePearlsButton = NodePath("PearlsPanel/SavePearlsButton")
+
+[node name="TopPanel" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="SpeedLabel" type="Label" parent="TopPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -12.5
+offset_right = 72.0
+offset_bottom = 10.5
+grow_vertical = 2
+text = "Speed:"
+
+[node name="SpeedInput" type="LineEdit" parent="TopPanel"]
+layout_mode = 0
+offset_left = 84.0
+offset_top = 14.0
+offset_right = 207.0
+offset_bottom = 45.0
+alignment = 2
+
+[node name="SpeedUnit" type="Label" parent="TopPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 216.0
+offset_top = -11.5
+offset_right = 268.0
+offset_bottom = 11.5
+grow_vertical = 2
+text = "m/s"
+
+[node name="TimeLabel" type="Label" parent="TopPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 310.0
+offset_top = -12.5
+offset_right = 362.0
+offset_bottom = 10.5
+grow_vertical = 2
+text = "Time:"
+
+[node name="TimeInput" type="LineEdit" parent="TopPanel"]
+layout_mode = 0
+offset_left = 364.0
+offset_top = 14.0
+offset_right = 487.0
+offset_bottom = 45.0
+alignment = 2
+
+[node name="TimeUnit" type="Label" parent="TopPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 494.0
+offset_top = -11.5
+offset_right = 546.0
+offset_bottom = 11.5
+grow_vertical = 2
+text = "sec"
+
+[node name="PearlsLabel" type="Label" parent="TopPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 589.0
+offset_top = -12.5
+offset_right = 641.0
+offset_bottom = 10.5
+grow_vertical = 2
+text = "Pearls:"
+
+[node name="PearlsButton" type="Button" parent="TopPanel"]
+layout_mode = 0
+offset_left = 653.0
+offset_top = 15.0
+offset_right = 712.0
+offset_bottom = 46.0
+text = "Edit"
+
+[node name="BottomPanel" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HSplitContainer" type="HSplitContainer" parent="BottomPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+split_offset = 155
+
+[node name="Control2" type="Control" parent="BottomPanel/HSplitContainer"]
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="BottomPanel/HSplitContainer/Control2"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 12.42
+offset_top = -11.5
+offset_right = 70.42
+offset_bottom = 11.5
+grow_vertical = 2
+text = "Status: "
+
+[node name="Control" type="Control" parent="BottomPanel/HSplitContainer"]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="BottomPanel/HSplitContainer/Control"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -66.345
+offset_top = -15.0
+offset_right = -5.34497
+offset_bottom = 16.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "Start"
+
+[node name="PearlsPanel" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -250.0
+offset_right = 200.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(200, 250)
+
+[node name="PearlsInput" type="TextEdit" parent="PearlsPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 20.0
+offset_top = 55.0
+offset_right = -17.0
+offset_bottom = 437.0
+grow_horizontal = 2
+
+[node name="PearlsHint" type="Label" parent="PearlsPanel"]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 18.0
+offset_right = 331.0
+offset_bottom = 41.0
+text = "Insert the contents \"gyongyok.txt\" here:"
+
+[node name="SavePearlsButton" type="Button" parent="PearlsPanel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 21.0
+offset_top = -47.0
+offset_right = -18.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Save"
+
+[connection signal="pressed" from="TopPanel/PearlsButton" to="." method="TogglePearls"]
+[connection signal="pressed" from="BottomPanel/HSplitContainer/Control/StartButton" to="." method="Start"]
+[connection signal="pressed" from="PearlsPanel/SavePearlsButton" to="." method="TogglePearls"]
