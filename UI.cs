@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Globalization;
 using System.Linq;
 using Godot;
 
@@ -22,15 +23,44 @@ public partial class UI : Control {
     [Export] private Panel musicPanel;
     [Export] private Label musicLabel;
     [Export] private Button musicPanelTrigger;
-    [Export] private AnimationPlayer PanelSlideAnim;
-    
-    public void MusicLabel() {
-        if (musicPanelTrigger.ButtonPressed) PanelSlideAnim.Play("slide_in");
-        else PanelSlideAnim.PlayBackwards("slide_in");
-    }
+    [Export] private Button pauseUnpause;
+    [Export] private Label musicProgressLabel;
+    [Export] private AnimationPlayer panelSlideAnim;
+    [Export] private AudioStreamPlayer musicPlayer;
 
+    private bool shouldAnimate = true;
+    private bool canHideEarly;
+    private bool hiddenEarly;
+    
+    public List<string> musicList = new List<string>{
+        "Sharks - Shiver [NCS Release]", 
+        "Akacia - Electric [NCS Release]",
+        "Cartoon - Why We Lose (feat. Coleman Trapp) [NCS Release]", 
+        "Syn Cole - Feel Good [NCS Release]", 
+        "Lost Sky - Dreams pt. II (feat. Sara Skinner) [NCS Release]", 
+        "Culture Code - Make Me Move (feat. Karra) [NCS Release]",
+        "Alan Walker - Dreamer [NCS Release]",
+        "Lost Sky - Fearless pt.II (feat. Chris Linton) [NCS Release]",
+        "Prismo - Stronger [NCS Release]",
+        "Prismo - Weakness [NCS Release]",
+        "Valence - Infinite [NCS Release]",
+        "Different Heaven - Nekozilla [NCS Release]",
+        "Different Heaven & EH!DE - My Heart [NCS Release]",
+        "Electro-Light - Symbolism [NCS Release]",
+        "JPB - High [NCS Release]",
+        "Elektronomia - Limitless [NCS Release]",
+        "Elektronomia - Energy [NCS Release]",
+        "Disfigure - Blank [NCS Release]"
+    };
+    
+    private Random random = new Random();
+    private int previousIndex = -1; // initialize previous index to an invalid value
+    private int index;
+    
+    
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
+        ChangeMusic();
         speedInput.Text = "1";
         timeInput.Text = "150000";
         pearlsInput.Text = File.ReadAllText("gyongyok3.txt");
@@ -38,6 +68,71 @@ public partial class UI : Control {
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta) {
+        int playbackPos = Convert.ToInt32(musicPlayer.GetPlaybackPosition());
+        int seconds = playbackPos - (playbackPos/ 60 * 60);
+        int minutes = playbackPos / 60;
+        musicProgressLabel.Text = $"{minutes:00}:{seconds:00}";
+    }
+    
+    public void MusicLabel() {
+        if (musicPanelTrigger.ButtonPressed) {
+            shouldAnimate = false;
+            panelSlideAnim.Play("slide_in");
+        }
+        else {
+            shouldAnimate = true;
+            panelSlideAnim.PlayBackwards("slide_in");
+        }
+    }
+
+    public void PauseUnpause() {
+        if (musicPlayer.Playing) {
+            pauseUnpause.Text = "Play";
+            musicPlayer.StreamPaused = true;
+        }
+        else {
+            pauseUnpause.Text = "Pause";
+            musicPlayer.StreamPaused = false;
+        }
+    }
+
+    public async void ChangeMusic() {
+        do {
+            index = random.Next(musicList.Count);
+        } while (index == previousIndex);
+
+        if (index == previousIndex) {
+            ChangeMusic();
+            return;
+        }
+
+        pauseUnpause.Text = "Pause";
+        musicPlayer.Stop();
+        index = random.Next(musicList.Count);
+        previousIndex = index;
+        string selectedString = musicList[index];
+        musicLabel.Text = selectedString;
+        if (shouldAnimate)
+            panelSlideAnim.Play("music_changed");
+        musicPlayer.Stream = GD.Load<AudioStream>("res://assets/music/"+selectedString+".mp3");
+        musicPlayer.Play();
+
+        canHideEarly = shouldAnimate;
+        await ToSignal(GetTree().CreateTimer(2f), "timeout");
+        if (hiddenEarly || !shouldAnimate) {
+            hiddenEarly = false;
+            canHideEarly = false;
+            return;
+        }
+        canHideEarly = false;
+        panelSlideAnim.PlayBackwards("music_changed");
+    }
+
+    public void HideMusicInfoEarly() {
+        if ((shouldAnimate && !canHideEarly)|| (!shouldAnimate && !canHideEarly)) return;
+        hiddenEarly = true;
+        canHideEarly = false;
+        panelSlideAnim.PlayBackwards("music_changed");
     }
 
     public void TogglePearls() {
