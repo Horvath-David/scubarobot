@@ -1,6 +1,58 @@
-[gd_scene load_steps=8 format=3 uid="uid://bvi78i7ieexns"]
+[gd_scene load_steps=5 format=3 uid="uid://bvi78i7ieexns"]
 
 [ext_resource type="Script" path="res://UI.cs" id="1_8w7hb"]
+
+[sub_resource type="Animation" id="Animation_nukje"]
+resource_name = "music_changed"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-989, -108), Vector2(0, -108)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Button:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1e-05, 1e-05)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:size")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1077, 98), Vector2(975, 98)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MusicProgress:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_dd1qu"]
 resource_name = "slide_in"
@@ -29,126 +81,38 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector2(-521.945, -204), Vector2(-521.945, -204), Vector2(0, -204)]
 }
-
-[sub_resource type="Animation" id="Animation_myr2d"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("MusicProgress:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(-989, -108)]
+"values": [Vector2(932, 74), Vector2(1008, 74)]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../MusicButtons:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MusicProgress:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-521.945, -204)]
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_0d57m"]
 _data = {
-"RESET": SubResource("Animation_myr2d"),
+"music_changed": SubResource("Animation_nukje"),
 "slide_in": SubResource("Animation_dd1qu")
 }
 
-[sub_resource type="Animation" id="Animation_ecfut"]
-resource_name = "slide_in"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(-989, -108), Vector2(0, -108)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:size")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(1077, 98), Vector2(975, 98)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Button:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1e-05, 1e-05)]
-}
-
-[sub_resource type="Animation" id="Animation_yt8gi"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-989, -108)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:size")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1077, 98)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Button:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_yy242"]
-_data = {
-"RESET": SubResource("Animation_yt8gi"),
-"slide_in": SubResource("Animation_ecfut")
-}
-
-[node name="UI" type="Control" node_paths=PackedStringArray("statusLabel", "startButton", "speedInput", "timeInput", "pearlsButton", "pearlsPanel", "pearlsInput", "savePearlsButton", "musicPanel", "musicLabel", "musicPanelTrigger", "PanelSlideAnim")]
+[node name="UI" type="Control" node_paths=PackedStringArray("statusLabel", "startButton", "speedInput", "timeInput", "pearlsButton", "pearlsPanel", "pearlsInput", "savePearlsButton", "musicPanel", "musicLabel", "musicPanelTrigger", "pauseUnpause", "musicProgressLabel", "panelSlideAnim", "musicPlayer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -167,7 +131,12 @@ savePearlsButton = NodePath("PearlsPanel/SavePearlsButton")
 musicPanel = NodePath("BottomPanel/MusicPanel")
 musicLabel = NodePath("BottomPanel/MusicPanel/MusicName")
 musicPanelTrigger = NodePath("BottomPanel/MusicPanel/Button")
-PanelSlideAnim = NodePath("BottomPanel/PanelSlide")
+pauseUnpause = NodePath("BottomPanel/MusicButtons/PauseUnpauseMusic")
+musicProgressLabel = NodePath("BottomPanel/MusicPanel/MusicProgress")
+panelSlideAnim = NodePath("BottomPanel/PanelSlide")
+musicPlayer = NodePath("AudioStreamPlayer")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
 [node name="TopPanel" type="Panel" parent="."]
 custom_minimum_size = Vector2(0, 60)
@@ -276,12 +245,6 @@ libraries = {
 "": SubResource("AnimationLibrary_0d57m")
 }
 
-[node name="MusicChanged" type="AnimationPlayer" parent="BottomPanel"]
-root_node = NodePath("../MusicPanel")
-libraries = {
-"": SubResource("AnimationLibrary_yy242")
-}
-
 [node name="MusicButtons" type="Panel" parent="BottomPanel"]
 layout_mode = 0
 offset_left = -521.945
@@ -289,7 +252,8 @@ offset_top = -204.0
 offset_right = -7.94501
 offset_bottom = -121.0
 
-[node name="Button2" type="Button" parent="BottomPanel/MusicButtons"]
+[node name="PauseUnpauseMusic" type="Button" parent="BottomPanel/MusicButtons"]
+layout_mode = 0
 offset_left = 147.0
 offset_top = 12.0
 offset_right = 233.0
@@ -297,7 +261,7 @@ offset_bottom = 55.0
 scale = Vector2(1.39, 1.39)
 text = "Pause"
 
-[node name="Button" type="Button" parent="BottomPanel/MusicButtons"]
+[node name="NextMusic" type="Button" parent="BottomPanel/MusicButtons"]
 layout_mode = 0
 offset_left = 19.0
 offset_top = 12.0
@@ -356,6 +320,16 @@ offset_top = 14.0
 offset_right = 968.0
 offset_bottom = 37.0
 text = "Now playing"
+
+[node name="MusicProgress" type="Label" parent="BottomPanel/MusicPanel"]
+visible = false
+layout_mode = 0
+offset_left = 1008.0
+offset_top = 74.0
+offset_right = 1058.0
+offset_bottom = 97.0
+text = "1:11"
+horizontal_alignment = 1
 
 [node name="HSplitContainer" type="HSplitContainer" parent="BottomPanel"]
 layout_mode = 1
@@ -447,7 +421,11 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Save"
 
+[connection signal="finished" from="AudioStreamPlayer" to="." method="ChangeMusic"]
 [connection signal="pressed" from="TopPanel/PearlsButton" to="." method="TogglePearls"]
+[connection signal="pressed" from="BottomPanel/MusicButtons/PauseUnpauseMusic" to="." method="PauseUnpause"]
+[connection signal="pressed" from="BottomPanel/MusicButtons/NextMusic" to="." method="ChangeMusic"]
+[connection signal="mouse_entered" from="BottomPanel/MusicPanel" to="." method="HideMusicInfoEarly"]
 [connection signal="pressed" from="BottomPanel/MusicPanel/Button" to="." method="MusicLabel"]
 [connection signal="pressed" from="BottomPanel/HSplitContainer/Control/StartButton" to="." method="Start"]
 [connection signal="pressed" from="PearlsPanel/SavePearlsButton" to="." method="TogglePearls"]
