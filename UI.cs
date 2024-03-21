@@ -19,6 +19,16 @@ public partial class UI : Control {
     [Export] private TextEdit pearlsInput;
     [Export] private Button savePearlsButton;
 
+    [Export] private Panel musicPanel;
+    [Export] private Label musicLabel;
+    [Export] private Button musicPanelTrigger;
+    [Export] private AnimationPlayer PanelSlideAnim;
+    
+    public void MusicLabel() {
+        if (musicPanelTrigger.ButtonPressed) PanelSlideAnim.Play("slide_in");
+        else PanelSlideAnim.PlayBackwards("slide_in");
+    }
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
         speedInput.Text = "1";
