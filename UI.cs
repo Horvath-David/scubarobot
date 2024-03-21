@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Godot;
 
@@ -19,6 +21,9 @@ public partial class UI : Control {
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
+        speedInput.Text = "1";
+        timeInput.Text = "150000";
+        pearlsInput.Text = File.ReadAllText("gyongyok3.txt");
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -52,8 +57,8 @@ public partial class UI : Control {
 
         statusLabel.Text = $"Status: Successfully read {pearls.Count} pearls";
 
-        var speed = 0d;
-        var time = 0d;
+        double speed;
+        double time;
         try {
             speed = speedInput.Text.ToFloat();
         }
@@ -65,10 +70,11 @@ public partial class UI : Control {
         try {
             time = timeInput.Text.ToFloat();
         }
-        catch (Exception e) {
+        catch (Exception _) {
             statusLabel.Text = "Error: Invalid float";
             return;
         }
+
 
         var maxTravel = speed * time;
         var maxDistance = maxTravel / 2;
@@ -78,6 +84,14 @@ public partial class UI : Control {
             var dist = Math.Sqrt(diag * diag + x.z * x.z);
             return dist <= maxDistance;
         }).ToList();
+        
+        var distOs = new Dictionary<int, double>();
+        accessiblePearls.ForEach(pearl => {
+            var diagO = Math.Sqrt(pearl.x * pearl.x + pearl.y * pearl.y);
+            distOs[pearl.id] = Math.Sqrt(diagO * diagO + pearl.z * pearl.z);
+        });
+
+        var stopwatch = Stopwatch.StartNew();
 
         List<Pearl> visits = [];
         var remainingTravel = maxTravel;
@@ -88,33 +102,32 @@ public partial class UI : Control {
         };
 
         while (true) {
-            var candidates = pearls
-                .Where(pearl => visits.All(x => x.id != pearl.id))
+            var candidates = accessiblePearls
                 .Where(pearl => {
-                    var x = Math.Abs(robotPos.x - pearl.x);
-                    var y = Math.Abs(robotPos.y - pearl.y);
-                    var z = Math.Abs(robotPos.z - pearl.z);
+                    var x = robotPos.x - pearl.x;
+                    var y = robotPos.y - pearl.y;
+                    var z = robotPos.z - pearl.z;
                     var diag = Math.Sqrt(x * x + y * y);
                     var dist = Math.Sqrt(diag * diag + z * z);
 
-                    var diagO = Math.Sqrt(pearl.x * pearl.x + pearl.y * pearl.y);
-                    var distO = Math.Sqrt(diagO * diagO + pearl.z * pearl.z);
+                    var distO = distOs[pearl.id];
                     return remainingTravel >= dist + distO;
                 }).ToList();
             if (!candidates.Any()) {
                 break;
-            } 
+            }
+
             var choice = candidates.MinBy(pearl => {
-                var x = Math.Abs(robotPos.x - pearl.x);
-                var y = Math.Abs(robotPos.y - pearl.y);
-                var z = Math.Abs(robotPos.z - pearl.z);
+                var x = robotPos.x - pearl.x;
+                var y = robotPos.y - pearl.y;
+                var z = robotPos.z - pearl.z;
                 var diag = Math.Sqrt(x * x + y * y);
                 var dist = Math.Sqrt(diag * diag + z * z);
                 return dist / pearl.e;
             });
-            var x = Math.Abs(robotPos.x - choice.x);
-            var y = Math.Abs(robotPos.y - choice.y);
-            var z = Math.Abs(robotPos.z - choice.z);
+            var x = robotPos.x - choice.x;
+            var y = robotPos.y - choice.y;
+            var z = robotPos.z - choice.z;
             var diag = Math.Sqrt(x * x + y * y);
             var dist = Math.Sqrt(diag * diag + z * z);
 
@@ -125,9 +138,12 @@ public partial class UI : Control {
                 z = choice.z
             };
             visits.Add(choice);
+            accessiblePearls.Remove(choice);
         }
-        
-        visits.ForEach(x => GD.Print(x));
-        GD.Print(visits.Count);
+
+        stopwatch.Stop();
+        var microseconds = stopwatch.ElapsedTicks / (TimeSpan.TicksPerMillisecond / 1000);
+
+        statusLabel.Text = $"Status: Calculated a path of {visits.Count} pearls in {microseconds}us";
     }
 }
