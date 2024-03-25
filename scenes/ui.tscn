@@ -443,6 +443,7 @@ text = "Save"
 [connection signal="pressed" from="BottomPanel/MusicButtons/PauseUnpauseMusic" to="." method="PauseUnpause"]
 [connection signal="pressed" from="BottomPanel/MusicButtons/NextMusic" to="." method="ChangeMusic"]
 [connection signal="drag_ended" from="BottomPanel/MusicButtons/HSlider" to="." method="ChangeMusicVol"]
+[connection signal="value_changed" from="BottomPanel/MusicButtons/HSlider" to="." method="SetMusicVol"]
 [connection signal="mouse_entered" from="BottomPanel/MusicPanel" to="." method="HideMusicInfoEarly"]
 [connection signal="pressed" from="BottomPanel/MusicPanel/Button" to="." method="MusicLabel"]
 [connection signal="pressed" from="BottomPanel/HSplitContainer/Control/StartButton" to="." method="Start"]

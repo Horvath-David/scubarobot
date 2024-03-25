@@ -109,6 +109,17 @@ public partial class UI : Control {
         volume = ((int)vol - 100) / 4;
         GD.Print(volume);
     }
+    
+    private void SetMusicVol(float vol) {
+        if (vol == 0) {
+            musicPlayer.VolumeDb = float.NegativeInfinity;
+            volume = -40;
+            return;
+        }
+        musicPlayer.VolumeDb = (vol - 100) / 4;
+        volume = ((int)vol - 100) / 4;
+        GD.Print(volume);
+    }
 
     private async void ChangeMusic() {
         do {
