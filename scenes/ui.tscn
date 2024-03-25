@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bvi78i7ieexns"]
+[gd_scene load_steps=6 format=3 uid="uid://bvi78i7ieexns"]
 
 [ext_resource type="Script" path="res://scripts/UI.cs" id="1_8w7hb"]
 
@@ -111,6 +111,9 @@ _data = {
 "music_changed": SubResource("Animation_nukje"),
 "slide_in": SubResource("Animation_dd1qu")
 }
+
+[sub_resource type="LabelSettings" id="LabelSettings_widry"]
+font_size = 30
 
 [node name="UI" type="Control" node_paths=PackedStringArray("statusLabel", "startButton", "speedInput", "timeInput", "pearlsButton", "pearlsPanel", "pearlsInput", "savePearlsButton", "musicPanel", "musicLabel", "musicPanelTrigger", "pauseUnpause", "musicProgressLabel", "panelSlideAnim", "musicPlayer")]
 layout_mode = 3
@@ -305,12 +308,12 @@ text = "♫"
 
 [node name="MusicName" type="Label" parent="BottomPanel/MusicPanel"]
 layout_mode = 0
-offset_left = 4.0
-offset_top = 49.0
-offset_right = 617.0
-offset_bottom = 82.0
-scale = Vector2(1.575, 1.575)
+offset_left = 114.0
+offset_top = 46.0
+offset_right = 973.0
+offset_bottom = 88.0
 text = "Cartoon - Why We Lose (feat. Coleman Trapp) [NCS Release]"
+label_settings = SubResource("LabelSettings_widry")
 horizontal_alignment = 2
 
 [node name="Label2" type="Label" parent="BottomPanel/MusicPanel"]
