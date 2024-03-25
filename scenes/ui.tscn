@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bvi78i7ieexns"]
+[gd_scene load_steps=10 format=3 uid="uid://bvi78i7ieexns"]
 
 [ext_resource type="Script" path="res://scripts/UI.cs" id="1_8w7hb"]
 
@@ -112,8 +112,19 @@ _data = {
 "slide_in": SubResource("Animation_dd1qu")
 }
 
+[sub_resource type="Theme" id="Theme_5d71c"]
+default_font_size = 23
+
+[sub_resource type="Theme" id="Theme_udlrb"]
+default_font_size = 23
+
 [sub_resource type="LabelSettings" id="LabelSettings_widry"]
 font_size = 30
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q7doq"]
+
+[sub_resource type="Theme" id="Theme_t8k0v"]
+TextEdit/styles/focus = SubResource("StyleBoxEmpty_q7doq")
 
 [node name="UI" type="Control" node_paths=PackedStringArray("statusLabel", "startButton", "speedInput", "timeInput", "pearlsButton", "pearlsPanel", "pearlsInput", "savePearlsButton", "musicPanel", "musicLabel", "musicPanelTrigger", "pauseUnpause", "musicProgressLabel", "panelSlideAnim", "musicPlayer", "musicVolume")]
 layout_mode = 3
@@ -122,6 +133,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("1_8w7hb")
 statusLabel = NodePath("BottomPanel/HSplitContainer/Control2/StatusLabel")
 startButton = NodePath("BottomPanel/HSplitContainer/Control/StartButton")
@@ -260,18 +272,18 @@ offset_bottom = -121.0
 layout_mode = 0
 offset_left = 147.0
 offset_top = 12.0
-offset_right = 233.0
-offset_bottom = 55.0
-scale = Vector2(1.39, 1.39)
+offset_right = 267.0
+offset_bottom = 72.0
+theme = SubResource("Theme_5d71c")
 text = "Pause"
 
 [node name="NextMusic" type="Button" parent="BottomPanel/MusicButtons"]
 layout_mode = 0
 offset_left = 19.0
 offset_top = 12.0
-offset_right = 105.0
-offset_bottom = 55.0
-scale = Vector2(1.39, 1.39)
+offset_right = 139.0
+offset_bottom = 72.0
+theme = SubResource("Theme_udlrb")
 text = "Next"
 
 [node name="HSlider" type="HSlider" parent="BottomPanel/MusicButtons"]
@@ -402,6 +414,7 @@ offset_top = 55.0
 offset_right = -17.0
 offset_bottom = 437.0
 grow_horizontal = 2
+theme = SubResource("Theme_t8k0v")
 
 [node name="PearlsHint" type="Label" parent="PearlsPanel"]
 layout_mode = 0
