@@ -26,10 +26,13 @@ public partial class UI : Control {
     [Export] private Label musicProgressLabel;
     [Export] private AnimationPlayer panelSlideAnim;
     [Export] private AudioStreamPlayer musicPlayer;
+    [Export] private Slider musicVolume;
 
     private bool shouldAnimate = true;
     private bool canHideEarly;
     private bool hiddenEarly;
+
+    private int volume;
     
     private readonly List<string> musicList = [
         "Sharks - Shiver [NCS Release]",
@@ -58,6 +61,7 @@ public partial class UI : Control {
     
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
+        musicPlayer.VolumeDb = ((float)volume - 100) / 4;
         ChangeMusic();
         speedInput.Text = "1";
         timeInput.Text = "150000";
@@ -92,6 +96,18 @@ public partial class UI : Control {
             pauseUnpause.Text = "Pause";
             musicPlayer.StreamPaused = false;
         }
+    }
+    
+    private void ChangeMusicVol(bool value_changed = true) {
+        var vol = musicVolume.Value;
+        if ((float)vol == 0) {
+            musicPlayer.VolumeDb = float.NegativeInfinity;
+            volume = -40;
+            return;
+        }
+        musicPlayer.VolumeDb = ((float) vol - 100) / 4;
+        volume = ((int)vol - 100) / 4;
+        GD.Print(volume);
     }
 
     private async void ChangeMusic() {
@@ -165,7 +181,7 @@ public partial class UI : Control {
         try {
             speed = speedInput.Text.ToFloat();
         }
-        catch (Exception e) {
+        catch (Exception _) {
             statusLabel.Text = "Error: Invalid speed";
             return;
         }
