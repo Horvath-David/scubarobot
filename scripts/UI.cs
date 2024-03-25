@@ -27,10 +27,13 @@ public partial class UI : Control {
     [Export] private Label musicProgressLabel;
     [Export] private AnimationPlayer panelSlideAnim;
     [Export] private AudioStreamPlayer musicPlayer;
+    [Export] private Slider musicVolume;
 
     private bool shouldAnimate = true;
     private bool canHideEarly;
     private bool hiddenEarly;
+
+    public int volume = 0;
     
     public List<string> musicList = new List<string>{
         "Sharks - Shiver [NCS Release]", 
@@ -60,6 +63,7 @@ public partial class UI : Control {
     
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
+        musicPlayer.VolumeDb = ((float)volume - 100) / 4;
         ChangeMusic();
         speedInput.Text = "1";
         timeInput.Text = "150000";
@@ -94,6 +98,18 @@ public partial class UI : Control {
             pauseUnpause.Text = "Pause";
             musicPlayer.StreamPaused = false;
         }
+    }
+    
+    public void ChangeMusicVol(bool value_changed = true) {
+        double vol = musicVolume.Value;
+        if ((float)vol == 0) {
+            musicPlayer.VolumeDb = Single.NegativeInfinity;
+            volume = -40;
+            return;
+        }
+        musicPlayer.VolumeDb = ((float) vol - 100) / 4;
+        volume = ((int)vol - 100) / 4;
+        GD.Print(volume);
     }
 
     public async void ChangeMusic() {
