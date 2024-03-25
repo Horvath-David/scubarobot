@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Globalization;
 using System.Linq;
 using Godot;
 
-namespace hunter;
+namespace hunter.scripts;
 
 public partial class UI : Control {
     [Export] private Label statusLabel;
@@ -32,12 +31,12 @@ public partial class UI : Control {
     private bool canHideEarly;
     private bool hiddenEarly;
     
-    public List<string> musicList = new List<string>{
-        "Sharks - Shiver [NCS Release]", 
+    private readonly List<string> musicList = [
+        "Sharks - Shiver [NCS Release]",
         "Akacia - Electric [NCS Release]",
-        "Cartoon - Why We Lose (feat. Coleman Trapp) [NCS Release]", 
-        "Syn Cole - Feel Good [NCS Release]", 
-        "Lost Sky - Dreams pt. II (feat. Sara Skinner) [NCS Release]", 
+        "Cartoon - Why We Lose (feat. Coleman Trapp) [NCS Release]",
+        "Syn Cole - Feel Good [NCS Release]",
+        "Lost Sky - Dreams pt. II (feat. Sara Skinner) [NCS Release]",
         "Culture Code - Make Me Move (feat. Karra) [NCS Release]",
         "Alan Walker - Dreamer [NCS Release]",
         "Lost Sky - Fearless pt.II (feat. Chris Linton) [NCS Release]",
@@ -51,9 +50,8 @@ public partial class UI : Control {
         "Elektronomia - Limitless [NCS Release]",
         "Elektronomia - Energy [NCS Release]",
         "Disfigure - Blank [NCS Release]"
-    };
+    ];
     
-    private Random random = new Random();
     private int previousIndex = -1; // initialize previous index to an invalid value
     private int index;
     
@@ -68,13 +66,13 @@ public partial class UI : Control {
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta) {
-        int playbackPos = Convert.ToInt32(musicPlayer.GetPlaybackPosition());
-        int seconds = playbackPos - (playbackPos/ 60 * 60);
-        int minutes = playbackPos / 60;
+        var playbackPos = Convert.ToInt32(musicPlayer.GetPlaybackPosition());
+        var seconds = playbackPos - (playbackPos/ 60 * 60);
+        var minutes = playbackPos / 60;
         musicProgressLabel.Text = $"{minutes:00}:{seconds:00}";
     }
     
-    public void MusicLabel() {
+    private void MusicLabel() {
         if (musicPanelTrigger.ButtonPressed) {
             shouldAnimate = false;
             panelSlideAnim.Play("slide_in");
@@ -85,7 +83,7 @@ public partial class UI : Control {
         }
     }
 
-    public void PauseUnpause() {
+    private void PauseUnpause() {
         if (musicPlayer.Playing) {
             pauseUnpause.Text = "Play";
             musicPlayer.StreamPaused = true;
@@ -96,9 +94,9 @@ public partial class UI : Control {
         }
     }
 
-    public async void ChangeMusic() {
+    private async void ChangeMusic() {
         do {
-            index = random.Next(musicList.Count);
+            index = Random.Shared.Next(musicList.Count);
         } while (index == previousIndex);
 
         if (index == previousIndex) {
@@ -108,9 +106,9 @@ public partial class UI : Control {
 
         pauseUnpause.Text = "Pause";
         musicPlayer.Stop();
-        index = random.Next(musicList.Count);
+        index = Random.Shared.Next(musicList.Count);
         previousIndex = index;
-        string selectedString = musicList[index];
+        var selectedString = musicList[index];
         musicLabel.Text = selectedString;
         if (shouldAnimate)
             panelSlideAnim.Play("music_changed");
@@ -128,19 +126,19 @@ public partial class UI : Control {
         panelSlideAnim.PlayBackwards("music_changed");
     }
 
-    public void HideMusicInfoEarly() {
+    private void HideMusicInfoEarly() {
         if ((shouldAnimate && !canHideEarly)|| (!shouldAnimate && !canHideEarly)) return;
         hiddenEarly = true;
         canHideEarly = false;
         panelSlideAnim.PlayBackwards("music_changed");
     }
 
-    public void TogglePearls() {
+    private void TogglePearls() {
         if (pearlsPanel.Visible) pearlsPanel.Hide();
         else pearlsPanel.Show();
     }
 
-    public void Start() {
+    private void Start() {
         var pearlsText = pearlsInput.Text;
         List<Pearl> pearls;
         try {
