@@ -65,7 +65,7 @@ public partial class UI : Control {
         ChangeMusic();
         speedInput.Text = "1";
         timeInput.Text = "150000";
-        pearlsInput.Text = File.ReadAllText("gyongyok.txt");
+        // pearlsInput.Text = File.ReadAllText("gyongyok.txt");
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
