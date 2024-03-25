@@ -1,3 +1,31 @@
-[gd_scene format=3 uid="uid://d3672npu6aala"]
+[gd_scene load_steps=6 format=3 uid="uid://d3672npu6aala"]
+
+[ext_resource type="Script" path="res://scripts/addons/camera.gd" id="1_554ia"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_w4ktd"]
+sky_top_color = Color(0.141176, 0.207843, 0.301961, 1)
+sky_horizon_color = Color(0.890196, 0.607843, 0.239216, 1)
+ground_horizon_color = Color(0.890196, 0.607843, 0.239216, 1)
+
+[sub_resource type="Sky" id="Sky_rwb1k"]
+sky_material = SubResource("ProceduralSkyMaterial_w4ktd")
+process_mode = 1
+
+[sub_resource type="Environment" id="Environment_381fh"]
+background_mode = 2
+sky = SubResource("Sky_rwb1k")
+ambient_light_source = 3
+ambient_light_color = Color(0.639216, 0.639216, 0.639216, 1)
+ambient_light_sky_contribution = 0.68
+
+[sub_resource type="BoxMesh" id="BoxMesh_pk3my"]
 
 [node name="3D" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.43986, 1.5037, 2.13416)
+environment = SubResource("Environment_381fh")
+script = ExtResource("1_554ia")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_pk3my")

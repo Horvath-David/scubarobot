@@ -7,3 +7,6 @@
 .idea/
 **/*.import
 *.import
+
+gyongyok*.txt
+path*.txt
