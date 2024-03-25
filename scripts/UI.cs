@@ -98,18 +98,6 @@ public partial class UI : Control {
         }
     }
     
-    private void ChangeMusicVol(bool value_changed = true) {
-        var vol = musicVolume.Value;
-        if ((float)vol == 0) {
-            musicPlayer.VolumeDb = float.NegativeInfinity;
-            volume = -40;
-            return;
-        }
-        musicPlayer.VolumeDb = ((float) vol - 100) / 4;
-        volume = ((int)vol - 100) / 4;
-        GD.Print(volume);
-    }
-    
     private void SetMusicVol(float vol) {
         if (vol == 0) {
             musicPlayer.VolumeDb = float.NegativeInfinity;
