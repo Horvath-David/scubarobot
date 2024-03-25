@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://d3672npu6aala"]
+[gd_scene load_steps=10 format=3 uid="uid://d3672npu6aala"]
 
 [ext_resource type="Script" path="res://scripts/addons/camera.gd" id="1_554ia"]
+[ext_resource type="Shader" path="res://scenes/3d.gdshader" id="2_c48sy"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_w4ktd"]
 sky_top_color = Color(0.141176, 0.207843, 0.301961, 1)
@@ -18,14 +19,42 @@ ambient_light_source = 3
 ambient_light_color = Color(0.639216, 0.639216, 0.639216, 1)
 ambient_light_sky_contribution = 0.68
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rw0ee"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cxmmb"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_rw0ee")
+shader = ExtResource("2_c48sy")
+shader_parameter/albedo = Color(0, 0, 0, 0.329412)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+
 [sub_resource type="BoxMesh" id="BoxMesh_pk3my"]
+material = SubResource("ShaderMaterial_cxmmb")
+
+[sub_resource type="BoxMesh" id="BoxMesh_psubj"]
 
 [node name="3D" type="Node3D"]
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.43986, 1.5037, 2.13416)
+transform = Transform3D(1, 0, 0, 0, 0.860564, 0.509342, 0, -0.509342, 0.860564, -1.43986, 14.7509, 42.4072)
 environment = SubResource("Environment_381fh")
+current = true
 script = ExtResource("1_554ia")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Camera3D"]
+light_energy = 4.846
+
+[node name="Bottom" type="MeshInstance3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, 20, 0, 0, 0, 70, -50, -10, 35)
 mesh = SubResource("BoxMesh_pk3my")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_psubj")
