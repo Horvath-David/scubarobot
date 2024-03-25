@@ -1,14 +1,14 @@
 [gd_scene load_steps=3 format=3 uid="uid://rshjmyhm5lur"]
 
-[ext_resource type="PackedScene" uid="uid://bvi78i7ieexns" path="res://ui.tscn" id="1_2hsu4"]
-[ext_resource type="PackedScene" uid="uid://d3672npu6aala" path="res://3d.tscn" id="1_76l01"]
+[ext_resource type="PackedScene" uid="uid://d3672npu6aala" path="res://3d.tscn" id="1_xyg1x"]
+[ext_resource type="PackedScene" uid="uid://bvi78i7ieexns" path="res://ui.tscn" id="2_2q0gt"]
 
 [node name="Main Node" type="Node"]
 
-[node name="3d" parent="." instance=ExtResource("1_76l01")]
+[node name="3d" parent="." instance=ExtResource("1_xyg1x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0114918, 4.76837e-07, -0.0146544)
 
-[node name="UI" parent="." instance=ExtResource("1_2hsu4")]
+[node name="UI" parent="." instance=ExtResource("2_2q0gt")]
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.965926, 0.0669873, -0.25, 0.0856457, 0.82878, 0.552981, 0.244238, -0.55555, 0.794803, -1.43986, 1.5037, 2.13416)

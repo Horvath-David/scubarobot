@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bvi78i7ieexns"]
 
-[ext_resource type="Script" path="res://UI.cs" id="1_8w7hb"]
+[ext_resource type="Script" path="res://scripts/UI.cs" id="1_8w7hb"]
 
 [sub_resource type="Animation" id="Animation_nukje"]
 resource_name = "music_changed"
