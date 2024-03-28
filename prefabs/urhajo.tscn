@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://k55rxx6s8c5y"]
+
+[ext_resource type="ArrayMesh" uid="uid://ym23jroetclf" path="res://assets/models/urhajo.obj" id="1_64mal"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0qktb"]
+albedo_color = Color(0, 0.74902, 1, 1)
+emission_enabled = true
+emission = Color(0, 0.74902, 1, 1)
+
+[node name="Urhajo" type="Node3D"]
+
+[node name="UrhajoMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0.118859, -0.394726, -0.0897051)
+mesh = ExtResource("1_64mal")
+surface_material_override/4 = SubResource("StandardMaterial3D_0qktb")
