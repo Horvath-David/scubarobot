@@ -30,6 +30,7 @@ public partial class UI : Control {
     
     private Node3D pearlContainer;
     private Node3D pool;
+    private Camera3D freeCamera;
 
     private bool shouldAnimate = true;
     private bool canHideEarly;
@@ -37,6 +38,7 @@ public partial class UI : Control {
 
     private List<Pearl> pearls;
     private int padding = 5;
+    private int cameraPadding = 10;
     private int poolX;
     private int poolY;
     private int poolZ;
@@ -72,8 +74,11 @@ public partial class UI : Control {
     public override void _Ready() {
         SetMusicVol((float) musicVolume.Value);
         ChangeMusic();
+        
         pearlContainer = GetNode<Node3D>("../3d/PearlContainer");
         pool = GetNode<Node3D>("../3d/Pool");
+        freeCamera = GetNode<Camera3D>("../3d/FreeCamera");
+        
         speedInput.Text = "1";
         timeInput.Text = "150000";
         try {
@@ -188,6 +193,7 @@ public partial class UI : Control {
         statusLabel.Text = $"Status: Successfully read {pearls.Count} pearls";
 
         DisplayPearls();
+        SideView();
 
         double speed;
         double time;
@@ -307,7 +313,42 @@ public partial class UI : Control {
         }
     }
 
+    private static float DegToRad(float deg) {
+        return (float)(deg / 180f * Math.PI);
+    }
+
     private void SideView() {
+        var w = poolX + 2 * cameraPadding;
+        var h = poolY + 2 * cameraPadding;
+        float l;
+        float fov;
+        if (w >= h) {
+            l = w;
+            fov = freeCamera.GetCameraProjection().GetFov();
+        }
+        else {
+            l = h;
+            var fovx = freeCamera.GetCameraProjection().GetFov();
+            var rect = GetViewportRect();
+            var aspect = rect.Size.Y / rect.Size.X;
+            fov = Projection.GetFovy(fovx, aspect);
+        }
         
+        var m = l / 2 / Math.Sin(DegToRad(fov / 2)) * Math.Sin(DegToRad(90 - fov / 2));
+
+        // GD.Print($"l: {l}");
+        // GD.Print($"fov: {fov}");
+        // GD.Print($"m: {m}");
+        
+        freeCamera.Position = new Vector3 {
+            X = -(poolX / 2),
+            Y = -(poolY / 2),
+            Z = (float)-m
+        };
+        freeCamera.Rotation = new Vector3 {
+            X = 0,
+            Y = DegToRad(180),
+            Z = 0
+        };
     }
 }

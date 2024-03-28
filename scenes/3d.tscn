@@ -45,7 +45,7 @@ material = SubResource("ShaderMaterial_cxmmb")
 transform = Transform3D(-0.866025, -0.15948, 0.473884, 0, 0.947768, 0.318959, -0.5, 0.276227, -0.820791, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="FreeCamera" type="Camera3D" parent="."]
 transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -2, 0, -2)
 current = true
 near = 0.001
