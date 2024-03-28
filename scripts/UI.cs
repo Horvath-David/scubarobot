@@ -27,11 +27,21 @@ public partial class UI : Control {
     [Export] private AnimationPlayer panelSlideAnim;
     [Export] private AudioStreamPlayer musicPlayer;
     [Export] private Slider musicVolume;
+    
+    private Node3D pearlContainer;
+    private Node3D pool;
 
     private bool shouldAnimate = true;
     private bool canHideEarly;
     private bool hiddenEarly;
 
+    private List<Pearl> pearls;
+    private int padding = 5;
+    private int poolX;
+    private int poolY;
+    private int poolZ;
+    
+    private PackedScene pearlScene = GD.Load<PackedScene>("res://prefabs/pearl.tscn");
     
     private readonly List<string> musicList = [
         "Sharks - Shiver [NCS Release]",
@@ -62,9 +72,16 @@ public partial class UI : Control {
     public override void _Ready() {
         SetMusicVol((float) musicVolume.Value);
         ChangeMusic();
+        pearlContainer = GetNode<Node3D>("../3d/PearlContainer");
+        pool = GetNode<Node3D>("../3d/Pool");
         speedInput.Text = "1";
         timeInput.Text = "150000";
-        // pearlsInput.Text = File.ReadAllText("gyongyok.txt");
+        try {
+            pearlsInput.Text = File.ReadAllText("gyongyok.txt");
+        }
+        catch {
+            // ignored
+        }
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -151,7 +168,6 @@ public partial class UI : Control {
 
     private void Start() {
         var pearlsText = pearlsInput.Text;
-        List<Pearl> pearls;
         try {
             pearls = pearlsText.Split("\n").Skip(1).Select((x, i) => {
                 var segments = x.Split(";");
@@ -170,6 +186,8 @@ public partial class UI : Control {
         }
 
         statusLabel.Text = $"Status: Successfully read {pearls.Count} pearls";
+
+        DisplayPearls();
 
         double speed;
         double time;
@@ -259,5 +277,37 @@ public partial class UI : Control {
         var microseconds = stopwatch.ElapsedTicks / (TimeSpan.TicksPerMillisecond / 1000);
 
         statusLabel.Text = $"Status: Calculated a path of {visits.Count} pearls in {microseconds}us";
+    }
+
+    private void DisplayPearls() {
+        poolX = pearls.Max(x => x.x) + padding;
+        poolY = pearls.Max(x => x.y) + padding;
+        poolZ = pearls.Max(x => x.z) + padding;
+
+        pool.Scale = new Vector3 {
+            X = poolX,
+            Y = poolY,
+            Z = poolZ
+        };
+
+        pool.Position = new Vector3 {
+            X = -(poolX / 2f),
+            Y = -(poolY / 2f),
+            Z = poolZ / 2f
+        };
+        
+        foreach (var pearl in pearls) {
+            var instance = (pearlScene.Instantiate() as Node3D)!;
+            instance.Position = new Vector3 {
+                X = pearl.x,
+                Y = pearl.y,
+                Z = pearl.z
+            };
+            pearlContainer.AddChild(instance);
+        }
+    }
+
+    private void SideView() {
+        
     }
 }

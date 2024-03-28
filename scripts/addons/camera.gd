@@ -6,7 +6,7 @@ const ALT_MULTIPLIER = 1.0 / CTRL_MULTIPLIER
 
 
 @export_range(0.0, 1.0) var sensitivity: float = 0.25
-var controls_hint_panel: Panel
+@onready var controls_hint_panel: Panel = $"../../UI/ControlsHintPanel"
 
 # Mouse state
 var _mouse_position = Vector2(0.0, 0.0)
@@ -74,7 +74,7 @@ func _unhandled_input(event):
 				controls_hint_panel.hide()
 
 func _ready():
-	controls_hint_panel = get_tree().get_root().get_node("Main Node/UI/ControlsHintPanel")
+	pass
 
 # Updates mouselook and movement every frame
 func _process(delta):
