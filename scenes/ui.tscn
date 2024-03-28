@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bvi78i7ieexns"]
+[gd_scene load_steps=11 format=3 uid="uid://bvi78i7ieexns"]
 
 [ext_resource type="Script" path="res://scripts/UI.cs" id="1_8w7hb"]
 
@@ -125,6 +125,9 @@ font_size = 30
 
 [sub_resource type="Theme" id="Theme_t8k0v"]
 TextEdit/styles/focus = SubResource("StyleBoxEmpty_q7doq")
+
+[sub_resource type="LabelSettings" id="LabelSettings_xqd3u"]
+font_size = 15
 
 [node name="UI" type="Control" node_paths=PackedStringArray("statusLabel", "startButton", "speedInput", "timeInput", "pearlsButton", "pearlsPanel", "pearlsInput", "savePearlsButton", "musicPanel", "musicLabel", "musicPanelTrigger", "pauseUnpause", "musicProgressLabel", "panelSlideAnim", "musicPlayer", "musicVolume")]
 layout_mode = 3
@@ -438,6 +441,48 @@ offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Save"
+
+[node name="ControlsHintPanel" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -244.0
+offset_top = 68.0
+offset_right = -8.0
+offset_bottom = 258.0
+grow_horizontal = 0
+
+[node name="Descriptions" type="Label" parent="ControlsHintPanel"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 110.0
+offset_bottom = 180.0
+text = "Exit freecam:
+Movement:
+Up:
+Down:
+Adjust speed:
+Go faster:
+Go slower:"
+label_settings = SubResource("LabelSettings_xqd3u")
+
+[node name="Buttons" type="Label" parent="ControlsHintPanel"]
+offset_left = 127.0
+offset_top = 8.0
+offset_right = 225.0
+offset_bottom = 180.0
+text = "ESC
+WASD
+Space
+Shift
+Mouse wheel
+CTRL
+ALT"
+label_settings = SubResource("LabelSettings_xqd3u")
+horizontal_alignment = 2
 
 [connection signal="finished" from="AudioStreamPlayer" to="." method="ChangeMusic"]
 [connection signal="pressed" from="TopPanel/PearlsButton" to="." method="TogglePearls"]
