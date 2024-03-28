@@ -1,14 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://d3672npu6aala"]
+[gd_scene load_steps=10 format=3 uid="uid://d3672npu6aala"]
 
 [ext_resource type="Script" path="res://scripts/addons/camera.gd" id="1_554ia"]
-[ext_resource type="ArrayMesh" uid="uid://ym23jroetclf" path="res://assets/models/urhajo.obj" id="2_1lx0q"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ixkvl"]
-albedo_color = Color(0, 0.74902, 1, 1)
-emission_enabled = true
-emission = Color(0, 0.74902, 1, 1)
+[ext_resource type="Shader" path="res://scenes/3d.gdshader" id="2_c48sy"]
+[ext_resource type="PackedScene" uid="uid://k55rxx6s8c5y" path="res://prefabs/urhajo.tscn" id="3_dju2y"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_w4ktd"]
+sun_angle_max = 172.22
 
 [sub_resource type="Sky" id="Sky_rwb1k"]
 sky_material = SubResource("ProceduralSkyMaterial_w4ktd")
@@ -17,25 +14,48 @@ process_mode = 1
 [sub_resource type="Environment" id="Environment_381fh"]
 background_mode = 2
 sky = SubResource("Sky_rwb1k")
+sky_custom_fov = 75.0
 ambient_light_source = 3
 ambient_light_color = Color(0.639216, 0.639216, 0.639216, 1)
 ambient_light_sky_contribution = 0.68
 
-[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_1bxtb"]
-dof_blur_near_distance = 0.09
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rw0ee"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cxmmb"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_rw0ee")
+shader = ExtResource("2_c48sy")
+shader_parameter/albedo = Color(0, 0, 0, 0.329412)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pk3my"]
+material = SubResource("ShaderMaterial_cxmmb")
 
 [node name="3D" type="Node3D"]
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.15948, 0.473884, 0, 0.947768, 0.318959, -0.5, 0.276227, -0.820791, 0, 0, 0)
+shadow_enabled = true
+
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.43986, 1.5037, 2.13416)
+current = true
 near = 0.001
 script = ExtResource("1_554ia")
 
-[node name="Urhajo" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)
-mesh = ExtResource("2_1lx0q")
-surface_material_override/4 = SubResource("StandardMaterial3D_ixkvl")
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_381fh")
-camera_attributes = SubResource("CameraAttributesPractical_1bxtb")
+
+[node name="Pool" type="MeshInstance3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, 20, 0, 0, 0, 70, -50, -10, 35)
+mesh = SubResource("BoxMesh_pk3my")
+
+[node name="Urhajo" parent="." instance=ExtResource("3_dju2y")]

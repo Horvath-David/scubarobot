@@ -32,7 +32,6 @@ public partial class UI : Control {
     private bool canHideEarly;
     private bool hiddenEarly;
 
-    private int volume;
     
     private readonly List<string> musicList = [
         "Sharks - Shiver [NCS Release]",
@@ -61,11 +60,11 @@ public partial class UI : Control {
     
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
-        musicPlayer.VolumeDb = ((float)volume - 100) / 4;
+        SetMusicVol((float) musicVolume.Value);
         ChangeMusic();
         speedInput.Text = "1";
         timeInput.Text = "150000";
-        pearlsInput.Text = File.ReadAllText("gyongyok.txt");
+        // pearlsInput.Text = File.ReadAllText("gyongyok.txt");
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -101,12 +100,9 @@ public partial class UI : Control {
     private void SetMusicVol(float vol) {
         if (vol == 0) {
             musicPlayer.VolumeDb = float.NegativeInfinity;
-            volume = -40;
             return;
         }
         musicPlayer.VolumeDb = (vol - 100) / 4;
-        volume = ((int)vol - 100) / 4;
-        GD.Print(volume);
     }
 
     private async void ChangeMusic() {
