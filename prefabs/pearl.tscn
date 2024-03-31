@@ -1,9 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://ce0qri7oe1mps"]
+[gd_scene load_steps=3 format=3 uid="uid://ce0qri7oe1mps"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_dl0pp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bxxwk"]
 
 [node name="Pearl" type="Node3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)
 mesh = SubResource("SphereMesh_dl0pp")
+surface_material_override/0 = SubResource("StandardMaterial3D_bxxwk")

@@ -39,6 +39,7 @@ public partial class UI : Control {
     private bool hiddenEarly;
 
     private List<Pearl> pearls;
+    private List<int> inaccessiblePearls = [];
     private int padding = 5;
     private int cameraPadding = 10;
     private float scaleMin = 0.4f;
@@ -87,7 +88,7 @@ public partial class UI : Control {
         tpsCamera = GetNode<Camera3D>("../3d/Urhajo/TpsCamera");
 
         speedInput.Text = "1";
-        timeInput.Text = "150000";
+        timeInput.Text = "150";
         try {
             pearlsInput.Text = File.ReadAllText("gyongyok.txt");
         }
@@ -201,9 +202,6 @@ public partial class UI : Control {
 
         statusLabel.Text = $"Status: Successfully read {pearls.Count} pearls";
 
-        DisplayPearls();
-        FreecamView();
-
         double speed;
         double time;
         try {
@@ -222,7 +220,6 @@ public partial class UI : Control {
             return;
         }
 
-
         var maxTravel = speed * time;
         var maxDistance = maxTravel / 2;
 
@@ -231,6 +228,11 @@ public partial class UI : Control {
             var dist = Math.Sqrt(diag * diag + x.z * x.z);
             return dist <= maxDistance;
         }).ToList();
+
+        inaccessiblePearls = pearls.Where(x => !accessiblePearls.Contains(x)).Select(x => x.id).ToList();
+        
+        DisplayPearls();
+        FreecamView();
 
         var distOs = new Dictionary<int, double>();
         accessiblePearls.ForEach(pearl => {
@@ -295,6 +297,10 @@ public partial class UI : Control {
     }
 
     private void DisplayPearls() {
+        foreach (var child in pearlContainer.GetChildren()) {
+            child.QueueFree();
+        }
+        
         poolX = pearls.Max(x => x.x) + padding;
         poolY = pearls.Max(x => x.y) + padding;
         poolZ = pearls.Max(x => x.z) + padding;
@@ -330,6 +336,12 @@ public partial class UI : Control {
                     X = scale,
                     Y = scale,
                     Z = scale
+                };
+            }
+
+            if (inaccessiblePearls.Contains(pearl.id)) {
+                mesh.MaterialOverride = new StandardMaterial3D {
+                    AlbedoColor = Color.Color8(69, 69, 69)
                 };
             }
 
@@ -374,6 +386,10 @@ public partial class UI : Control {
             Y = DegToRad(180),
             Z = 0
         };
+    }
+
+    private void ColorPearls() {
+        
     }
 
     private void FreecamView() {
