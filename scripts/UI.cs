@@ -27,7 +27,7 @@ public partial class UI : Control {
     [Export] private AnimationPlayer panelSlideAnim;
     [Export] private AudioStreamPlayer musicPlayer;
     [Export] private Slider musicVolume;
-    
+
     private Node3D pearlContainer;
     private Node3D pool;
     private Camera3D freeCamera;
@@ -39,12 +39,14 @@ public partial class UI : Control {
     private List<Pearl> pearls;
     private int padding = 5;
     private int cameraPadding = 10;
+    private float scaleMin = 0.4f;
+    private float scaleMax = 0.7f;
     private int poolX;
     private int poolY;
     private int poolZ;
-    
+
     private PackedScene pearlScene = GD.Load<PackedScene>("res://prefabs/pearl.tscn");
-    
+
     private readonly List<string> musicList = [
         "Sharks - Shiver [NCS Release]",
         "Akacia - Electric [NCS Release]",
@@ -65,20 +67,20 @@ public partial class UI : Control {
         "Elektronomia - Energy [NCS Release]",
         "Disfigure - Blank [NCS Release]"
     ];
-    
+
     private int previousIndex = -1; // initialize previous index to an invalid value
     private int index;
-    
-    
+
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
-        SetMusicVol((float) musicVolume.Value);
+        SetMusicVol((float)musicVolume.Value);
         ChangeMusic();
-        
+
         pearlContainer = GetNode<Node3D>("../3d/PearlContainer");
         pool = GetNode<Node3D>("../3d/Pool");
         freeCamera = GetNode<Camera3D>("../3d/FreeCamera");
-        
+
         speedInput.Text = "1";
         timeInput.Text = "150000";
         try {
@@ -92,11 +94,11 @@ public partial class UI : Control {
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta) {
         var playbackPos = Convert.ToInt32(musicPlayer.GetPlaybackPosition());
-        var seconds = playbackPos - (playbackPos/ 60 * 60);
+        var seconds = playbackPos - (playbackPos / 60 * 60);
         var minutes = playbackPos / 60;
         musicProgressLabel.Text = $"{minutes:00}:{seconds:00}";
     }
-    
+
     private void MusicLabel() {
         if (musicPanelTrigger.ButtonPressed) {
             shouldAnimate = false;
@@ -118,12 +120,13 @@ public partial class UI : Control {
             musicPlayer.StreamPaused = false;
         }
     }
-    
+
     private void SetMusicVol(float vol) {
         if (vol == 0) {
             musicPlayer.VolumeDb = float.NegativeInfinity;
             return;
         }
+
         musicPlayer.VolumeDb = (vol - 100) / 4;
     }
 
@@ -145,7 +148,7 @@ public partial class UI : Control {
         musicLabel.Text = selectedString;
         if (shouldAnimate)
             panelSlideAnim.Play("music_changed");
-        musicPlayer.Stream = GD.Load<AudioStream>("res://assets/music/"+selectedString+".mp3");
+        musicPlayer.Stream = GD.Load<AudioStream>("res://assets/music/" + selectedString + ".mp3");
         musicPlayer.Play();
 
         canHideEarly = shouldAnimate;
@@ -155,12 +158,13 @@ public partial class UI : Control {
             canHideEarly = false;
             return;
         }
+
         canHideEarly = false;
         panelSlideAnim.PlayBackwards("music_changed");
     }
 
     private void HideMusicInfoEarly() {
-        if ((shouldAnimate && !canHideEarly)|| (!shouldAnimate && !canHideEarly)) return;
+        if ((shouldAnimate && !canHideEarly) || (!shouldAnimate && !canHideEarly)) return;
         hiddenEarly = true;
         canHideEarly = false;
         panelSlideAnim.PlayBackwards("music_changed");
@@ -222,7 +226,7 @@ public partial class UI : Control {
             var dist = Math.Sqrt(diag * diag + x.z * x.z);
             return dist <= maxDistance;
         }).ToList();
-        
+
         var distOs = new Dictionary<int, double>();
         accessiblePearls.ForEach(pearl => {
             var diagO = Math.Sqrt(pearl.x * pearl.x + pearl.y * pearl.y);
@@ -290,6 +294,10 @@ public partial class UI : Control {
         poolY = pearls.Max(x => x.y) + padding;
         poolZ = pearls.Max(x => x.z) + padding;
 
+        var eMin = pearls.Min(x => x.e);
+        var eMax = pearls.Max(x => x.e);
+        var eDiff = (float)(eMax - eMin);
+
         pool.Scale = new Vector3 {
             X = poolX,
             Y = poolY,
@@ -301,7 +309,7 @@ public partial class UI : Control {
             Y = -(poolY / 2f),
             Z = poolZ / 2f
         };
-        
+
         foreach (var pearl in pearls) {
             var instance = (pearlScene.Instantiate() as Node3D)!;
             instance.Position = new Vector3 {
@@ -309,6 +317,17 @@ public partial class UI : Control {
                 Y = pearl.y,
                 Z = pearl.z
             };
+            var mesh = instance.GetNode<MeshInstance3D>("MeshInstance3D");
+            if (eDiff > 0) {
+                var scaleFactor = pearl.e == eMin ? 0f : (pearl.e - eMin) / eDiff;
+                var scale = scaleMin + (scaleMax - scaleMin) * scaleFactor;
+                mesh.Scale = new Vector3 {
+                    X = scale,
+                    Y = scale,
+                    Z = scale
+                };
+            }
+
             pearlContainer.AddChild(instance);
         }
     }
@@ -333,13 +352,13 @@ public partial class UI : Control {
             var aspect = rect.Size.Y / rect.Size.X;
             fov = Projection.GetFovy(fovx, aspect);
         }
-        
+
         var m = l / 2 / Math.Sin(DegToRad(fov / 2)) * Math.Sin(DegToRad(90 - fov / 2));
 
         // GD.Print($"l: {l}");
         // GD.Print($"fov: {fov}");
         // GD.Print($"m: {m}");
-        
+
         freeCamera.Position = new Vector3 {
             X = -(poolX / 2),
             Y = -(poolY / 2),

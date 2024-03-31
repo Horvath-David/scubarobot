@@ -470,6 +470,7 @@ Go slower:"
 label_settings = SubResource("LabelSettings_xqd3u")
 
 [node name="Buttons" type="Label" parent="ControlsHintPanel"]
+layout_mode = 0
 offset_left = 127.0
 offset_top = 8.0
 offset_right = 225.0
