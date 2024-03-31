@@ -13,3 +13,9 @@ emission = Color(0, 0.74902, 1, 1)
 transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0.118859, -0.394726, -0.0897051)
 mesh = ExtResource("1_64mal")
 surface_material_override/4 = SubResource("StandardMaterial3D_0qktb")
+
+[node name="FpsCamera" type="Camera3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.253611, 0.0218671, 0)
+
+[node name="TpsCamera" type="Camera3D" parent="."]
+transform = Transform3D(-3.78552e-08, 0.5, -0.866025, 2.18557e-08, 0.866025, 0.5, 1, -1.77636e-15, -4.37114e-08, -1.677, 1.298, 0)

@@ -31,6 +31,8 @@ public partial class UI : Control {
     private Node3D pearlContainer;
     private Node3D pool;
     private Camera3D freeCamera;
+    private Camera3D fpsCamera;
+    private Camera3D tpsCamera;
 
     private bool shouldAnimate = true;
     private bool canHideEarly;
@@ -44,6 +46,7 @@ public partial class UI : Control {
     private int poolX;
     private int poolY;
     private int poolZ;
+    
 
     private PackedScene pearlScene = GD.Load<PackedScene>("res://prefabs/pearl.tscn");
 
@@ -80,6 +83,8 @@ public partial class UI : Control {
         pearlContainer = GetNode<Node3D>("../3d/PearlContainer");
         pool = GetNode<Node3D>("../3d/Pool");
         freeCamera = GetNode<Camera3D>("../3d/FreeCamera");
+        fpsCamera = GetNode<Camera3D>("../3d/Urhajo/FpsCamera");
+        tpsCamera = GetNode<Camera3D>("../3d/Urhajo/TpsCamera");
 
         speedInput.Text = "1";
         timeInput.Text = "150000";
@@ -197,7 +202,7 @@ public partial class UI : Control {
         statusLabel.Text = $"Status: Successfully read {pearls.Count} pearls";
 
         DisplayPearls();
-        SideView();
+        FreecamView();
 
         double speed;
         double time;
@@ -336,7 +341,7 @@ public partial class UI : Control {
         return (float)(deg / 180f * Math.PI);
     }
 
-    private void SideView() {
+    private void PlaceFreecam() {
         var w = poolX + 2 * cameraPadding;
         var h = poolY + 2 * cameraPadding;
         float l;
@@ -369,5 +374,24 @@ public partial class UI : Control {
             Y = DegToRad(180),
             Z = 0
         };
+    }
+
+    private void FreecamView() {
+        PlaceFreecam();
+        freeCamera.Current = true;
+        fpsCamera.Current = false;
+        tpsCamera.Current = false;
+    }
+    
+    private void FpsView() {
+        fpsCamera.Current = true;
+        freeCamera.Current = false;
+        tpsCamera.Current = false;
+    }
+    
+    private void TpsView() {
+        tpsCamera.Current = true;
+        freeCamera.Current = false;
+        fpsCamera.Current = false;
     }
 }

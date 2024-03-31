@@ -442,6 +442,46 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Save"
 
+[node name="CameraSelectorPanel" type="Panel" parent="."]
+layout_mode = 1
+offset_left = 8.0
+offset_top = 68.0
+offset_right = 136.0
+offset_bottom = 222.0
+
+[node name="Title" type="Label" parent="CameraSelectorPanel"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 118.0
+offset_bottom = 32.0
+text = "Select camera:"
+label_settings = SubResource("LabelSettings_xqd3u")
+
+[node name="FreecamButton" type="Button" parent="CameraSelectorPanel"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 37.0
+offset_right = 119.0
+offset_bottom = 68.0
+text = "Freecam"
+
+[node name="FpsButton" type="Button" parent="CameraSelectorPanel"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 76.0
+offset_right = 119.0
+offset_bottom = 107.0
+text = "First person"
+
+[node name="TpsButton" type="Button" parent="CameraSelectorPanel"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 115.0
+offset_right = 119.0
+offset_bottom = 146.0
+text = "Third person"
+
 [node name="ControlsHintPanel" type="Panel" parent="."]
 visible = false
 layout_mode = 1
@@ -495,3 +535,6 @@ horizontal_alignment = 2
 [connection signal="pressed" from="BottomPanel/MusicPanel/Button" to="." method="MusicLabel"]
 [connection signal="pressed" from="BottomPanel/HSplitContainer/Control/StartButton" to="." method="Start"]
 [connection signal="pressed" from="PearlsPanel/SavePearlsButton" to="." method="TogglePearls"]
+[connection signal="pressed" from="CameraSelectorPanel/FreecamButton" to="." method="FreecamView"]
+[connection signal="pressed" from="CameraSelectorPanel/FpsButton" to="." method="FpsView"]
+[connection signal="pressed" from="CameraSelectorPanel/TpsButton" to="." method="TpsView"]
