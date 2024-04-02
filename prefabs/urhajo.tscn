@@ -8,14 +8,15 @@ emission_enabled = true
 emission = Color(0, 0.74902, 1, 1)
 
 [node name="Urhajo" type="Node3D"]
+transform = Transform3D(1, 3.0571e-14, 1.74846e-07, 0, 1, -1.74846e-07, -1.74846e-07, 1.74846e-07, 1, 0, 0, 0)
 
 [node name="UrhajoMesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0.118859, -0.394726, -0.0897051)
+transform = Transform3D(-4.37114e-10, 0, 0.01, 0, 0.01, -7.94093e-23, -0.01, 0, -4.37114e-10, -0.0887101, -0.397015, -0.116322)
 mesh = ExtResource("1_64mal")
 surface_material_override/4 = SubResource("StandardMaterial3D_0qktb")
 
 [node name="FpsCamera" type="Camera3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.253611, 0.0218671, 0)
+transform = Transform3D(1, 1.74846e-07, 0, -1.74846e-07, 1, 1.74846e-07, 2.84217e-14, -1.74846e-07, 1, 0.00445923, 0.121407, -0.315891)
 
 [node name="TpsCamera" type="Camera3D" parent="."]
-transform = Transform3D(-3.78552e-08, 0.5, -0.866025, 2.18557e-08, 0.866025, 0.5, 1, -1.77636e-15, -4.37114e-08, -1.677, 1.298, 0)
+transform = Transform3D(1, 1.26184e-07, 8.74228e-08, -1.5299e-07, 0.866025, 0.5, -1.26184e-08, -0.5, 0.866025, 0, 1.67, 1.67)

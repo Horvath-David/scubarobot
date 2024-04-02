@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://d3672npu6aala"]
+[gd_scene load_steps=12 format=3 uid="uid://d3672npu6aala"]
 
 [ext_resource type="Script" path="res://scripts/addons/camera.gd" id="1_554ia"]
 [ext_resource type="Shader" path="res://scenes/3d.gdshader" id="2_c48sy"]
@@ -39,6 +39,12 @@ shader_parameter/uv2_offset = Vector3(0, 0, 0)
 [sub_resource type="BoxMesh" id="BoxMesh_pk3my"]
 material = SubResource("ShaderMaterial_cxmmb")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o2fjv"]
+albedo_color = Color(0, 0.466667, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nfqbh"]
+material = SubResource("StandardMaterial3D_o2fjv")
+
 [node name="3D" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -64,4 +70,8 @@ visible = false
 mesh = SubResource("BoxMesh_pk3my")
 
 [node name="Urhajo" parent="." instance=ExtResource("3_dju2y")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
+
+[node name="OriginCube" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+mesh = SubResource("BoxMesh_nfqbh")

@@ -29,6 +29,7 @@ public partial class UI : Control {
     [Export] private AudioStreamPlayer musicPlayer;
     [Export] private Slider musicVolume;
 
+    private Node3D urhajo;
     private Node3D pearlContainer;
     private Node3D pool;
     private Camera3D freeCamera;
@@ -41,15 +42,21 @@ public partial class UI : Control {
 
     private List<Pearl> allPearls;
     private List<int> inaccessiblePearls = [];
-    private List<Pearl> path = [];
     private int padding = 5;
     private int cameraPadding = 10;
-    private float scaleMin = 0.4f;
-    private float scaleMax = 0.7f;
+    private float scaleMin = 0.35f;
+    private float scaleMax = 0.6f;
     private int poolX;
     private int poolY;
     private int poolZ;
-    
+
+    private bool moving;
+    private double speed;
+    private double time;
+    private List<Pearl> path = [];
+    private int collected = -1;
+    private Vector3 currentTarget;
+    private Vector3 currentPos;
 
     private PackedScene pearlScene = GD.Load<PackedScene>("res://prefabs/pearl.tscn");
 
@@ -85,6 +92,7 @@ public partial class UI : Control {
 
         pearlContainer = GetNode<Node3D>("../3d/PearlContainer");
         pool = GetNode<Node3D>("../3d/Pool");
+        urhajo = GetNode<Node3D>("../3d/Urhajo");
         freeCamera = GetNode<Camera3D>("../3d/FreeCamera");
         fpsCamera = GetNode<Camera3D>("../3d/Urhajo/FpsCamera");
         tpsCamera = GetNode<Camera3D>("../3d/Urhajo/TpsCamera");
@@ -105,6 +113,48 @@ public partial class UI : Control {
         var seconds = playbackPos - (playbackPos / 60 * 60);
         var minutes = playbackPos / 60;
         musicProgressLabel.Text = $"{minutes:00}:{seconds:00}";
+    }
+
+    public override void _PhysicsProcess(double delta) {
+        base._PhysicsProcess(delta);
+
+        if (!moving) return;
+
+        var frameTravel = speed * delta;
+        double dist;
+        {
+            var x = currentTarget.X - currentPos.X;
+            var y = currentTarget.Y - currentPos.Y;
+            var z = currentTarget.Z - currentPos.Z;
+            var diag = Math.Sqrt(x * x + y * y);
+            dist = Math.Sqrt(diag * diag + z * z);
+        }
+        var framesNeeded = dist / frameTravel;
+        // GD.Print(frameTravel);
+        // GD.Print(dist);
+        // GD.Print(framesNeeded);
+        // GD.Print(currentTarget);
+        var movementVector = (currentTarget - currentPos) / new Vector3 {
+            X = (float)framesNeeded,
+            Y = (float)framesNeeded,
+            Z = (float)framesNeeded
+        };
+        // GD.Print(movementVector);
+
+        if (movementVector.Length() > dist) {
+            if (currentTarget == Vector3.Zero) {
+                urhajo.Position = Vector3.Zero;
+                moving = false;
+                GD.Print("Returned to Origin.");
+                return;
+            }
+            CollectNextPearl();
+            GD.Print($"Switching target: {currentTarget}");
+            return;
+        }
+
+        urhajo.Position += movementVector;
+        currentPos += movementVector;
     }
 
     private void MusicLabel() {
@@ -184,6 +234,14 @@ public partial class UI : Control {
     }
 
     private void Load() {
+        urhajo.Position = Vector3.Zero;
+        currentPos = Vector3.Zero;
+        moving = false;
+        collected = -1;
+        foreach (var child in pearlContainer.GetChildren()) {
+            child.Free();
+        }
+        
         var pearlsText = pearlsInput.Text;
         try {
             allPearls = pearlsText.Split("\n").Skip(1).Select((x, i) => {
@@ -203,9 +261,7 @@ public partial class UI : Control {
         }
 
         statusLabel.Text = $"Status: Successfully read {allPearls.Count} pearls";
-
-        double speed;
-        double time;
+        
         try {
             speed = speedInput.Text.ToFloat();
         }
@@ -238,21 +294,30 @@ public partial class UI : Control {
 
         var stopwatch = Stopwatch.StartNew();
         path = CalculatePath(accessiblePearls, maxTravel);
+        collected = -1;
         stopwatch.Stop();
         var microseconds = stopwatch.ElapsedTicks / (TimeSpan.TicksPerMillisecond / 1000);
-        
-        DisplayPath();
 
         statusLabel.Text = $"Status: Calculated a path of {path.Count} pearls in {microseconds / 1_000_000d}s";
-        loadButton.Position = new Vector2 {
-            X = loadButton.Position.X - 66,
-            Y = loadButton.Position.Y
-        };
-        startButton.Show();
+        if (!startButton.Visible) {
+            loadButton.Position = new Vector2 {
+                X = loadButton.Position.X - 66,
+                Y = loadButton.Position.Y
+            };
+            startButton.Show();
+        }
+        
+        DisplayPath();
+        CollectNextPearl();
     }
 
     private void Start() {
-        
+        if (path.Count < 1) {
+            statusLabel.Text = "Error: Nowhere to go";
+            return;
+        }
+        currentPos = urhajo.Position;
+        moving = true;
     }
 
     private static List<Pearl> CalculatePath(List<Pearl> pearls, double maxTravel) {
@@ -370,7 +435,6 @@ public partial class UI : Control {
     private void DisplayPath() {
         var pearlInstances = pearlContainer.GetChildren();
         
-        GD.Print(path.Count);
         foreach (var pearl in path) {
             var child = pearlInstances.ElementAt(pearl.id);
             var mesh = child.GetNode<MeshInstance3D>("MeshInstance3D");
@@ -378,6 +442,33 @@ public partial class UI : Control {
                 AlbedoColor = Color.Color8(255, 38, 38)
             };
         }
+    }
+
+    private void CollectNextPearl() {
+        collected += 1;
+        if (collected >= path.Count) {
+            currentTarget = Vector3.Zero;
+        }
+        else {
+            currentTarget = new Vector3 {
+                X = -path[collected].x,
+                Y = -path[collected].y,
+                Z = path[collected].z
+            };
+            var nextPearlInstance = pearlContainer.GetChildren().ElementAt(path[collected].id);
+            var nextMesh = nextPearlInstance.GetNode<MeshInstance3D>("MeshInstance3D");
+            nextMesh.MaterialOverride = new StandardMaterial3D {
+                AlbedoColor = Color.Color8(230, 168, 0)
+            };
+        }
+        urhajo.LookAt(currentTarget);
+
+        if (collected == 0) return;
+        var previousPearlInstance = pearlContainer.GetChildren().ElementAt(path[collected - 1].id);
+        var mesh = previousPearlInstance.GetNode<MeshInstance3D>("MeshInstance3D");
+        mesh.MaterialOverride = new StandardMaterial3D {
+            AlbedoColor = Color.Color8(0, 119, 255)
+        };
     }
 
     private static float DegToRad(float deg) {
