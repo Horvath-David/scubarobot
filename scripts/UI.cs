@@ -38,8 +38,9 @@ public partial class UI : Control {
     private bool canHideEarly;
     private bool hiddenEarly;
 
-    private List<Pearl> pearls;
+    private List<Pearl> allPearls;
     private List<int> inaccessiblePearls = [];
+    private List<Pearl> path = [];
     private int padding = 5;
     private int cameraPadding = 10;
     private float scaleMin = 0.4f;
@@ -184,7 +185,7 @@ public partial class UI : Control {
     private void Start() {
         var pearlsText = pearlsInput.Text;
         try {
-            pearls = pearlsText.Split("\n").Skip(1).Select((x, i) => {
+            allPearls = pearlsText.Split("\n").Skip(1).Select((x, i) => {
                 var segments = x.Split(";");
                 return new Pearl {
                     id = i,
@@ -200,7 +201,7 @@ public partial class UI : Control {
             return;
         }
 
-        statusLabel.Text = $"Status: Successfully read {pearls.Count} pearls";
+        statusLabel.Text = $"Status: Successfully read {allPearls.Count} pearls";
 
         double speed;
         double time;
@@ -223,26 +224,33 @@ public partial class UI : Control {
         var maxTravel = speed * time;
         var maxDistance = maxTravel / 2;
 
-        var accessiblePearls = pearls.Where(x => {
+        var accessiblePearls = allPearls.Where(x => {
             var diag = Math.Sqrt(x.x * x.x + x.y * x.y);
             var dist = Math.Sqrt(diag * diag + x.z * x.z);
             return dist <= maxDistance;
         }).ToList();
 
-        inaccessiblePearls = pearls.Where(x => !accessiblePearls.Contains(x)).Select(x => x.id).ToList();
+        inaccessiblePearls = allPearls.Where(x => !accessiblePearls.Contains(x)).Select(x => x.id).ToList();
         
         DisplayPearls();
         FreecamView();
 
+        var stopwatch = Stopwatch.StartNew();
+        path = CalculatePath(accessiblePearls, maxTravel);
+        stopwatch.Stop();
+        var microseconds = stopwatch.ElapsedTicks / (TimeSpan.TicksPerMillisecond / 1000);
+
+        statusLabel.Text = $"Status: Calculated a path of {path.Count} pearls in {microseconds / 1_000_000d}s";
+    }
+
+    private static List<Pearl> CalculatePath(List<Pearl> pearls, double maxTravel) {
         var distOs = new Dictionary<int, double>();
-        accessiblePearls.ForEach(pearl => {
+        pearls.ForEach(pearl => {
             var diagO = Math.Sqrt(pearl.x * pearl.x + pearl.y * pearl.y);
             distOs[pearl.id] = Math.Sqrt(diagO * diagO + pearl.z * pearl.z);
         });
 
-        var stopwatch = Stopwatch.StartNew();
-
-        List<Pearl> visits = [];
+        List<Pearl> path = [];
         var remainingTravel = maxTravel;
         var robotPos = new Pos {
             x = 0,
@@ -251,7 +259,7 @@ public partial class UI : Control {
         };
 
         while (true) {
-            var candidates = accessiblePearls
+            var candidates = pearls
                 .Where(pearl => {
                     var x = robotPos.x - pearl.x;
                     var y = robotPos.y - pearl.y;
@@ -286,14 +294,11 @@ public partial class UI : Control {
                 y = choice.y,
                 z = choice.z
             };
-            visits.Add(choice);
-            accessiblePearls.Remove(choice);
+            path.Add(choice);
+            pearls.Remove(choice);
         }
 
-        stopwatch.Stop();
-        var microseconds = stopwatch.ElapsedTicks / (TimeSpan.TicksPerMillisecond / 1000);
-
-        statusLabel.Text = $"Status: Calculated a path of {visits.Count} pearls in {microseconds}us";
+        return path;
     }
 
     private void DisplayPearls() {
@@ -301,12 +306,12 @@ public partial class UI : Control {
             child.QueueFree();
         }
         
-        poolX = pearls.Max(x => x.x) + padding;
-        poolY = pearls.Max(x => x.y) + padding;
-        poolZ = pearls.Max(x => x.z) + padding;
+        poolX = allPearls.Max(x => x.x) + padding;
+        poolY = allPearls.Max(x => x.y) + padding;
+        poolZ = allPearls.Max(x => x.z) + padding;
 
-        var eMin = pearls.Min(x => x.e);
-        var eMax = pearls.Max(x => x.e);
+        var eMin = allPearls.Min(x => x.e);
+        var eMax = allPearls.Max(x => x.e);
         var eDiff = (float)(eMax - eMin);
 
         pool.Scale = new Vector3 {
@@ -321,7 +326,7 @@ public partial class UI : Control {
             Z = poolZ / 2f
         };
 
-        foreach (var pearl in pearls) {
+        foreach (var pearl in allPearls) {
             var instance = (pearlScene.Instantiate() as Node3D)!;
             instance.Position = new Vector3 {
                 X = pearl.x,
