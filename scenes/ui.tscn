@@ -1,6 +1,19 @@
-[gd_scene load_steps=11 format=3 uid="uid://bvi78i7ieexns"]
+[gd_scene load_steps=15 format=3 uid="uid://bvi78i7ieexns"]
 
 [ext_resource type="Script" path="res://scripts/UI.cs" id="1_8w7hb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7fja"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+
+[sub_resource type="Theme" id="Theme_qr86o"]
+Panel/styles/panel = SubResource("StyleBoxFlat_c7fja")
+
+[sub_resource type="Theme" id="Theme_8oe3h"]
+Panel/styles/panel = SubResource("StyleBoxFlat_c7fja")
 
 [sub_resource type="Animation" id="Animation_nukje"]
 resource_name = "music_changed"
@@ -121,6 +134,9 @@ default_font_size = 23
 [sub_resource type="LabelSettings" id="LabelSettings_widry"]
 font_size = 30
 
+[sub_resource type="Theme" id="Theme_1igrm"]
+Panel/styles/panel = SubResource("StyleBoxFlat_c7fja")
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q7doq"]
 
 [sub_resource type="Theme" id="Theme_t8k0v"]
@@ -129,7 +145,7 @@ TextEdit/styles/focus = SubResource("StyleBoxEmpty_q7doq")
 [sub_resource type="LabelSettings" id="LabelSettings_xqd3u"]
 font_size = 15
 
-[node name="UI" type="Control" node_paths=PackedStringArray("statusLabel", "startButton", "speedInput", "timeInput", "pearlsButton", "pearlsPanel", "pearlsInput", "savePearlsButton", "musicPanel", "musicLabel", "musicPanelTrigger", "pauseUnpause", "musicProgressLabel", "panelSlideAnim", "musicPlayer", "musicVolume")]
+[node name="UI" type="Control" node_paths=PackedStringArray("statusLabel", "loadButton", "startButton", "speedInput", "timeInput", "pearlsButton", "pearlsPanel", "pearlsInput", "savePearlsButton", "musicPanel", "musicLabel", "musicPanelTrigger", "pauseUnpause", "musicProgressLabel", "panelSlideAnim", "musicPlayer", "musicVolume")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -139,6 +155,7 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_8w7hb")
 statusLabel = NodePath("BottomPanel/HSplitContainer/Control2/StatusLabel")
+loadButton = NodePath("BottomPanel/HSplitContainer/Control/LoadButton")
 startButton = NodePath("BottomPanel/HSplitContainer/Control/StartButton")
 speedInput = NodePath("TopPanel/SpeedInput")
 timeInput = NodePath("TopPanel/TimeInput")
@@ -163,6 +180,7 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
+theme = SubResource("Theme_qr86o")
 
 [node name="SpeedLabel" type="Label" parent="TopPanel"]
 layout_mode = 1
@@ -257,6 +275,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
+theme = SubResource("Theme_8oe3h")
 
 [node name="PanelSlide" type="AnimationPlayer" parent="BottomPanel"]
 root_node = NodePath("../MusicPanel")
@@ -267,9 +286,9 @@ libraries = {
 [node name="MusicButtons" type="Panel" parent="BottomPanel"]
 layout_mode = 0
 offset_left = -521.945
-offset_top = -204.0
+offset_top = -197.0
 offset_right = -7.94501
-offset_bottom = -121.0
+offset_bottom = -114.0
 
 [node name="PauseUnpauseMusic" type="Button" parent="BottomPanel/MusicButtons"]
 layout_mode = 0
@@ -300,8 +319,8 @@ value = 80.0
 [node name="MusicPanel" type="Panel" parent="BottomPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 1.0
-anchor_bottom = 1.0
+anchor_top = 1.05
+anchor_bottom = 1.05
 offset_left = -989.0
 offset_top = -148.0
 offset_right = 88.0
@@ -376,8 +395,25 @@ text = "Status: "
 
 [node name="Control" type="Control" parent="BottomPanel/HSplitContainer"]
 layout_mode = 2
+theme = SubResource("Theme_1igrm")
+
+[node name="LoadButton" type="Button" parent="BottomPanel/HSplitContainer/Control"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -149.0
+offset_top = -15.0
+offset_right = -5.0
+offset_bottom = 16.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "Load & calculate"
 
 [node name="StartButton" type="Button" parent="BottomPanel/HSplitContainer/Control"]
+visible = false
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -533,6 +569,7 @@ horizontal_alignment = 2
 [connection signal="value_changed" from="BottomPanel/MusicButtons/HSlider" to="." method="SetMusicVol"]
 [connection signal="mouse_entered" from="BottomPanel/MusicPanel" to="." method="HideMusicInfoEarly"]
 [connection signal="pressed" from="BottomPanel/MusicPanel/Button" to="." method="MusicLabel"]
+[connection signal="pressed" from="BottomPanel/HSplitContainer/Control/LoadButton" to="." method="Load"]
 [connection signal="pressed" from="BottomPanel/HSplitContainer/Control/StartButton" to="." method="Start"]
 [connection signal="pressed" from="PearlsPanel/SavePearlsButton" to="." method="TogglePearls"]
 [connection signal="pressed" from="CameraSelectorPanel/FreecamButton" to="." method="FreecamView"]

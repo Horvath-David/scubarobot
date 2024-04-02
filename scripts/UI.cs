@@ -9,6 +9,7 @@ namespace hunter.scripts;
 
 public partial class UI : Control {
     [Export] private Label statusLabel;
+    [Export] private Button loadButton;
     [Export] private Button startButton;
 
     [Export] private LineEdit speedInput;
@@ -182,7 +183,7 @@ public partial class UI : Control {
         else pearlsPanel.Show();
     }
 
-    private void Start() {
+    private void Load() {
         var pearlsText = pearlsInput.Text;
         try {
             allPearls = pearlsText.Split("\n").Skip(1).Select((x, i) => {
@@ -239,8 +240,19 @@ public partial class UI : Control {
         path = CalculatePath(accessiblePearls, maxTravel);
         stopwatch.Stop();
         var microseconds = stopwatch.ElapsedTicks / (TimeSpan.TicksPerMillisecond / 1000);
+        
+        DisplayPath();
 
         statusLabel.Text = $"Status: Calculated a path of {path.Count} pearls in {microseconds / 1_000_000d}s";
+        loadButton.Position = new Vector2 {
+            X = loadButton.Position.X - 66,
+            Y = loadButton.Position.Y
+        };
+        startButton.Show();
+    }
+
+    private void Start() {
+        
     }
 
     private static List<Pearl> CalculatePath(List<Pearl> pearls, double maxTravel) {
@@ -352,6 +364,20 @@ public partial class UI : Control {
 
             pearlContainer.AddChild(instance);
         }
+        pool.Show();
+    }
+
+    private void DisplayPath() {
+        var pearlInstances = pearlContainer.GetChildren();
+        
+        GD.Print(path.Count);
+        foreach (var pearl in path) {
+            var child = pearlInstances.ElementAt(pearl.id);
+            var mesh = child.GetNode<MeshInstance3D>("MeshInstance3D");
+            mesh.MaterialOverride = new StandardMaterial3D {
+                AlbedoColor = Color.Color8(255, 38, 38)
+            };
+        }
     }
 
     private static float DegToRad(float deg) {
@@ -391,10 +417,6 @@ public partial class UI : Control {
             Y = DegToRad(180),
             Z = 0
         };
-    }
-
-    private void ColorPearls() {
-        
     }
 
     private void FreecamView() {
