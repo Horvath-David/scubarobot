@@ -1,6 +1,20 @@
-[gd_scene load_steps=11 format=3 uid="uid://bvi78i7ieexns"]
+[gd_scene load_steps=16 format=3 uid="uid://bvi78i7ieexns"]
 
 [ext_resource type="Script" path="res://scripts/UI.cs" id="1_8w7hb"]
+[ext_resource type="FontFile" uid="uid://64p14fh458ki" path="res://assets/JetBrainsMono-Medium.ttf" id="2_u6n4n"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7fja"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+
+[sub_resource type="Theme" id="Theme_qr86o"]
+Panel/styles/panel = SubResource("StyleBoxFlat_c7fja")
+
+[sub_resource type="Theme" id="Theme_8oe3h"]
+Panel/styles/panel = SubResource("StyleBoxFlat_c7fja")
 
 [sub_resource type="Animation" id="Animation_nukje"]
 resource_name = "music_changed"
@@ -121,6 +135,9 @@ default_font_size = 23
 [sub_resource type="LabelSettings" id="LabelSettings_widry"]
 font_size = 30
 
+[sub_resource type="Theme" id="Theme_1igrm"]
+Panel/styles/panel = SubResource("StyleBoxFlat_c7fja")
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q7doq"]
 
 [sub_resource type="Theme" id="Theme_t8k0v"]
@@ -129,7 +146,7 @@ TextEdit/styles/focus = SubResource("StyleBoxEmpty_q7doq")
 [sub_resource type="LabelSettings" id="LabelSettings_xqd3u"]
 font_size = 15
 
-[node name="UI" type="Control" node_paths=PackedStringArray("statusLabel", "startButton", "speedInput", "timeInput", "pearlsButton", "pearlsPanel", "pearlsInput", "savePearlsButton", "musicPanel", "musicLabel", "musicPanelTrigger", "pauseUnpause", "musicProgressLabel", "panelSlideAnim", "musicPlayer", "musicVolume")]
+[node name="UI" type="Control" node_paths=PackedStringArray("statusLabel", "progressLabel", "loadButton", "startButton", "speedInput", "timeInput", "pearlsButton", "pearlsPanel", "pearlsInput", "savePearlsButton", "musicPanel", "musicLabel", "musicPanelTrigger", "pauseUnpause", "musicProgressLabel", "panelSlideAnim", "musicPlayer", "musicVolume")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -139,6 +156,8 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_8w7hb")
 statusLabel = NodePath("BottomPanel/HSplitContainer/Control2/StatusLabel")
+progressLabel = NodePath("ProgressLabel")
+loadButton = NodePath("BottomPanel/HSplitContainer/Control/LoadButton")
 startButton = NodePath("BottomPanel/HSplitContainer/Control/StartButton")
 speedInput = NodePath("TopPanel/SpeedInput")
 timeInput = NodePath("TopPanel/TimeInput")
@@ -163,6 +182,7 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
+theme = SubResource("Theme_qr86o")
 
 [node name="SpeedLabel" type="Label" parent="TopPanel"]
 layout_mode = 1
@@ -257,6 +277,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
+theme = SubResource("Theme_8oe3h")
 
 [node name="PanelSlide" type="AnimationPlayer" parent="BottomPanel"]
 root_node = NodePath("../MusicPanel")
@@ -267,9 +288,9 @@ libraries = {
 [node name="MusicButtons" type="Panel" parent="BottomPanel"]
 layout_mode = 0
 offset_left = -521.945
-offset_top = -204.0
+offset_top = -197.0
 offset_right = -7.94501
-offset_bottom = -121.0
+offset_bottom = -114.0
 
 [node name="PauseUnpauseMusic" type="Button" parent="BottomPanel/MusicButtons"]
 layout_mode = 0
@@ -300,8 +321,8 @@ value = 80.0
 [node name="MusicPanel" type="Panel" parent="BottomPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 1.0
-anchor_bottom = 1.0
+anchor_top = 1.05
+anchor_bottom = 1.05
 offset_left = -989.0
 offset_top = -148.0
 offset_right = 88.0
@@ -376,8 +397,25 @@ text = "Status: "
 
 [node name="Control" type="Control" parent="BottomPanel/HSplitContainer"]
 layout_mode = 2
+theme = SubResource("Theme_1igrm")
+
+[node name="LoadButton" type="Button" parent="BottomPanel/HSplitContainer/Control"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -149.0
+offset_top = -15.0
+offset_right = -5.0
+offset_bottom = 16.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "Load & calculate"
 
 [node name="StartButton" type="Button" parent="BottomPanel/HSplitContainer/Control"]
+visible = false
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -442,6 +480,46 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Save"
 
+[node name="CameraSelectorPanel" type="Panel" parent="."]
+layout_mode = 1
+offset_left = 8.0
+offset_top = 68.0
+offset_right = 136.0
+offset_bottom = 222.0
+
+[node name="Title" type="Label" parent="CameraSelectorPanel"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 118.0
+offset_bottom = 32.0
+text = "Select camera:"
+label_settings = SubResource("LabelSettings_xqd3u")
+
+[node name="FreecamButton" type="Button" parent="CameraSelectorPanel"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 37.0
+offset_right = 119.0
+offset_bottom = 68.0
+text = "Freecam"
+
+[node name="FpsButton" type="Button" parent="CameraSelectorPanel"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 76.0
+offset_right = 119.0
+offset_bottom = 107.0
+text = "First person"
+
+[node name="TpsButton" type="Button" parent="CameraSelectorPanel"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 115.0
+offset_right = 119.0
+offset_bottom = 146.0
+text = "Third person"
+
 [node name="ControlsHintPanel" type="Panel" parent="."]
 visible = false
 layout_mode = 1
@@ -470,6 +548,7 @@ Go slower:"
 label_settings = SubResource("LabelSettings_xqd3u")
 
 [node name="Buttons" type="Label" parent="ControlsHintPanel"]
+layout_mode = 0
 offset_left = 127.0
 offset_top = 8.0
 offset_right = 225.0
@@ -484,6 +563,22 @@ ALT"
 label_settings = SubResource("LabelSettings_xqd3u")
 horizontal_alignment = 2
 
+[node name="ProgressLabel" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -225.0
+offset_top = 80.0
+offset_right = 225.0
+offset_bottom = 125.0
+grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_u6n4n")
+theme_override_font_sizes/font_size = 24
+text = "12/43 points  -  12.4/78.6 seconds"
+
 [connection signal="finished" from="AudioStreamPlayer" to="." method="ChangeMusic"]
 [connection signal="pressed" from="TopPanel/PearlsButton" to="." method="TogglePearls"]
 [connection signal="pressed" from="BottomPanel/MusicButtons/PauseUnpauseMusic" to="." method="PauseUnpause"]
@@ -492,5 +587,9 @@ horizontal_alignment = 2
 [connection signal="value_changed" from="BottomPanel/MusicButtons/HSlider" to="." method="SetMusicVol"]
 [connection signal="mouse_entered" from="BottomPanel/MusicPanel" to="." method="HideMusicInfoEarly"]
 [connection signal="pressed" from="BottomPanel/MusicPanel/Button" to="." method="MusicLabel"]
+[connection signal="pressed" from="BottomPanel/HSplitContainer/Control/LoadButton" to="." method="Load"]
 [connection signal="pressed" from="BottomPanel/HSplitContainer/Control/StartButton" to="." method="Start"]
 [connection signal="pressed" from="PearlsPanel/SavePearlsButton" to="." method="TogglePearls"]
+[connection signal="pressed" from="CameraSelectorPanel/FreecamButton" to="." method="FreecamView"]
+[connection signal="pressed" from="CameraSelectorPanel/FpsButton" to="." method="FpsView"]
+[connection signal="pressed" from="CameraSelectorPanel/TpsButton" to="." method="TpsView"]

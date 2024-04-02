@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://d3672npu6aala"]
+[gd_scene load_steps=12 format=3 uid="uid://d3672npu6aala"]
 
 [ext_resource type="Script" path="res://scripts/addons/camera.gd" id="1_554ia"]
 [ext_resource type="Shader" path="res://scenes/3d.gdshader" id="2_c48sy"]
@@ -39,6 +39,12 @@ shader_parameter/uv2_offset = Vector3(0, 0, 0)
 [sub_resource type="BoxMesh" id="BoxMesh_pk3my"]
 material = SubResource("ShaderMaterial_cxmmb")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o2fjv"]
+albedo_color = Color(0, 0.466667, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nfqbh"]
+material = SubResource("StandardMaterial3D_o2fjv")
+
 [node name="3D" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -46,9 +52,10 @@ transform = Transform3D(-0.866025, -0.15948, 0.473884, 0, 0.947768, 0.318959, -0
 shadow_enabled = true
 
 [node name="FreeCamera" type="Camera3D" parent="."]
-transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -2, 0, -2)
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -6, 0, -5)
 current = true
 near = 0.001
+far = 10000.0
 script = ExtResource("1_554ia")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -57,9 +64,16 @@ environment = SubResource("Environment_381fh")
 [node name="PearlContainer" type="Node3D" parent="."]
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)
 
+[node name="LineContainer" type="Node3D" parent="."]
+
 [node name="Pool" type="MeshInstance3D" parent="."]
 transform = Transform3D(100, 0, 0, 0, 20, 0, 0, 0, 70, -50, -10, 35)
+visible = false
 mesh = SubResource("BoxMesh_pk3my")
 
 [node name="Urhajo" parent="." instance=ExtResource("3_dju2y")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+transform = Transform3D(-2.18557e-07, 0, 5, 0, 5, 0, -5, 0, -2.18557e-07, 0, 0, 0)
+
+[node name="OriginCube" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+mesh = SubResource("BoxMesh_nfqbh")

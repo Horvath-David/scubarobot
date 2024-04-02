@@ -39,7 +39,7 @@ func _unhandled_input(event):
 	if event is InputEventMouseButton:
 		match event.button_index:
 			MOUSE_BUTTON_LEFT:
-				if event.pressed:
+				if event.pressed and current:
 					get_viewport().gui_release_focus()
 					_captured = true
 					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
