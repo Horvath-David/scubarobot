@@ -1,6 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://bvi78i7ieexns"]
+[gd_scene load_steps=16 format=3 uid="uid://bvi78i7ieexns"]
 
 [ext_resource type="Script" path="res://scripts/UI.cs" id="1_8w7hb"]
+[ext_resource type="FontFile" uid="uid://64p14fh458ki" path="res://assets/JetBrainsMono-Medium.ttf" id="2_u6n4n"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7fja"]
 content_margin_left = 0.0
@@ -145,7 +146,7 @@ TextEdit/styles/focus = SubResource("StyleBoxEmpty_q7doq")
 [sub_resource type="LabelSettings" id="LabelSettings_xqd3u"]
 font_size = 15
 
-[node name="UI" type="Control" node_paths=PackedStringArray("statusLabel", "loadButton", "startButton", "speedInput", "timeInput", "pearlsButton", "pearlsPanel", "pearlsInput", "savePearlsButton", "musicPanel", "musicLabel", "musicPanelTrigger", "pauseUnpause", "musicProgressLabel", "panelSlideAnim", "musicPlayer", "musicVolume")]
+[node name="UI" type="Control" node_paths=PackedStringArray("statusLabel", "progressLabel", "loadButton", "startButton", "speedInput", "timeInput", "pearlsButton", "pearlsPanel", "pearlsInput", "savePearlsButton", "musicPanel", "musicLabel", "musicPanelTrigger", "pauseUnpause", "musicProgressLabel", "panelSlideAnim", "musicPlayer", "musicVolume")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -155,6 +156,7 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_8w7hb")
 statusLabel = NodePath("BottomPanel/HSplitContainer/Control2/StatusLabel")
+progressLabel = NodePath("ProgressLabel")
 loadButton = NodePath("BottomPanel/HSplitContainer/Control/LoadButton")
 startButton = NodePath("BottomPanel/HSplitContainer/Control/StartButton")
 speedInput = NodePath("TopPanel/SpeedInput")
@@ -560,6 +562,22 @@ CTRL
 ALT"
 label_settings = SubResource("LabelSettings_xqd3u")
 horizontal_alignment = 2
+
+[node name="ProgressLabel" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -225.0
+offset_top = 80.0
+offset_right = 225.0
+offset_bottom = 125.0
+grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_u6n4n")
+theme_override_font_sizes/font_size = 24
+text = "12/43 points  -  12.4/78.6 seconds"
 
 [connection signal="finished" from="AudioStreamPlayer" to="." method="ChangeMusic"]
 [connection signal="pressed" from="TopPanel/PearlsButton" to="." method="TogglePearls"]

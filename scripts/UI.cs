@@ -9,6 +9,7 @@ namespace hunter.scripts;
 
 public partial class UI : Control {
     [Export] private Label statusLabel;
+    [Export] private Label progressLabel;
     [Export] private Button loadButton;
     [Export] private Button startButton;
 
@@ -53,7 +54,7 @@ public partial class UI : Control {
 
     private bool moving;
     private bool inProgress;
-    private double speed;
+    private double speed = 1;
     private double time;
     private List<Pearl> path = [];
     private int collected = -1;
@@ -114,9 +115,10 @@ public partial class UI : Control {
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta) {
         var playbackPos = Convert.ToInt32(musicPlayer.GetPlaybackPosition());
-        var seconds = playbackPos - (playbackPos / 60 * 60);
+        var seconds = playbackPos - playbackPos / 60 * 60;
         var minutes = playbackPos / 60;
         musicProgressLabel.Text = $"{minutes:00}:{seconds:00}";
+        SetProgressLabel();
     }
 
     public override void _PhysicsProcess(double delta) {
@@ -274,11 +276,21 @@ public partial class UI : Control {
             return;
         }
 
+        if (speed <= 0) {
+            statusLabel.Text = "Error: Invalid speed";
+            return;
+        }
+
         try {
             time = timeInput.Text.ToFloat();
         }
         catch (Exception _) {
-            statusLabel.Text = "Error: Invalid float";
+            statusLabel.Text = "Error: Invalid time";
+            return;
+        }
+        
+        if (time <= 0) {
+            statusLabel.Text = "Error: Invalid time";
             return;
         }
 
@@ -313,6 +325,7 @@ public partial class UI : Control {
 
         DisplayPath();
         CollectNextPearl();
+        progressLabel.Show();
     }
 
     private void Start() {
@@ -547,6 +560,42 @@ public partial class UI : Control {
         prevLineMesh.MaterialOverride = new StandardMaterial3D {
             AlbedoColor = Color.Color8(0, 119, 255)
         };
+    }
+
+    private void SetProgressLabel() {
+        var collectedList = path.Where((_, i) => i < collected).ToList();
+        var sum = collectedList.Sum(x => x.e);
+        var dist = 0d;
+        var currentVec = Vector3.Zero;
+        foreach (var pearl in collectedList) {
+            var nextVec = new Vector3 {
+                X = -pearl.x,
+                Y = -pearl.y,
+                Z = pearl.z
+            };
+            dist += (nextVec - currentVec).Length();
+            currentVec = nextVec;
+        }
+
+        dist += (urhajo.Position - currentVec).Length();
+        var timeRounded = Math.Round(dist / speed, 1);
+        
+        var sumTotal = path.Sum(x => x.e);
+        var distTotal = 0d;
+        currentVec = Vector3.Zero;
+        foreach (var pearl in path) {
+            var nextVec = new Vector3 {
+                X = -pearl.x,
+                Y = -pearl.y,
+                Z = pearl.z
+            };
+            distTotal += (nextVec - currentVec).Length();
+            currentVec = nextVec;
+        }
+
+        distTotal += (Vector3.Zero - currentVec).Length();
+        var timeRoundedTotal = Math.Round(distTotal / speed, 1);
+        progressLabel.Text = $"{sum}/{sumTotal} points  -  {timeRounded:N1}/{timeRoundedTotal:N1} seconds";
     }
 
     private static float DegToRad(float deg) {
