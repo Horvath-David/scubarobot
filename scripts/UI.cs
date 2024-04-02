@@ -31,6 +31,7 @@ public partial class UI : Control {
 
     private Node3D urhajo;
     private Node3D pearlContainer;
+    private Node3D lineContainer;
     private Node3D pool;
     private Camera3D freeCamera;
     private Camera3D fpsCamera;
@@ -45,12 +46,13 @@ public partial class UI : Control {
     private int padding = 5;
     private int cameraPadding = 10;
     private float scaleMin = 0.35f;
-    private float scaleMax = 0.6f;
+    private float scaleMax = 0.8f;
     private int poolX;
     private int poolY;
     private int poolZ;
 
     private bool moving;
+    private bool inProgress;
     private double speed;
     private double time;
     private List<Pearl> path = [];
@@ -59,6 +61,7 @@ public partial class UI : Control {
     private Vector3 currentPos;
 
     private PackedScene pearlScene = GD.Load<PackedScene>("res://prefabs/pearl.tscn");
+    private PackedScene lineScene = GD.Load<PackedScene>("res://prefabs/line.tscn");
 
     private readonly List<string> musicList = [
         "Sharks - Shiver [NCS Release]",
@@ -91,6 +94,7 @@ public partial class UI : Control {
         ChangeMusic();
 
         pearlContainer = GetNode<Node3D>("../3d/PearlContainer");
+        lineContainer = GetNode<Node3D>("../3d/LineContainer");
         pool = GetNode<Node3D>("../3d/Pool");
         urhajo = GetNode<Node3D>("../3d/Urhajo");
         freeCamera = GetNode<Camera3D>("../3d/FreeCamera");
@@ -121,35 +125,29 @@ public partial class UI : Control {
         if (!moving) return;
 
         var frameTravel = speed * delta;
-        double dist;
-        {
-            var x = currentTarget.X - currentPos.X;
-            var y = currentTarget.Y - currentPos.Y;
-            var z = currentTarget.Z - currentPos.Z;
-            var diag = Math.Sqrt(x * x + y * y);
-            dist = Math.Sqrt(diag * diag + z * z);
-        }
+        var dist = (currentTarget - currentPos).Length();
         var framesNeeded = dist / frameTravel;
-        // GD.Print(frameTravel);
-        // GD.Print(dist);
-        // GD.Print(framesNeeded);
-        // GD.Print(currentTarget);
         var movementVector = (currentTarget - currentPos) / new Vector3 {
             X = (float)framesNeeded,
             Y = (float)framesNeeded,
             Z = (float)framesNeeded
         };
-        // GD.Print(movementVector);
 
         if (movementVector.Length() > dist) {
             if (currentTarget == Vector3.Zero) {
                 urhajo.Position = Vector3.Zero;
                 moving = false;
-                GD.Print("Returned to Origin.");
+                statusLabel.Text = "Status: Finished, returned to origin.";
+                var lineInstance = lineContainer.GetChildren().Last();
+                var lineMesh = lineInstance.GetNode<MeshInstance3D>("LineMesh");
+                lineMesh.MaterialOverride = new StandardMaterial3D {
+                    AlbedoColor = Color.Color8(0, 119, 255)
+                };
+                startButton.Disabled = true;
                 return;
             }
+
             CollectNextPearl();
-            GD.Print($"Switching target: {currentTarget}");
             return;
         }
 
@@ -237,11 +235,17 @@ public partial class UI : Control {
         urhajo.Position = Vector3.Zero;
         currentPos = Vector3.Zero;
         moving = false;
+        inProgress = false;
+        startButton.Text = "Start";
+        startButton.Disabled = false;
         collected = -1;
         foreach (var child in pearlContainer.GetChildren()) {
             child.Free();
         }
-        
+        foreach (var child in lineContainer.GetChildren()) {
+            child.Free();
+        }
+
         var pearlsText = pearlsInput.Text;
         try {
             allPearls = pearlsText.Split("\n").Skip(1).Select((x, i) => {
@@ -261,7 +265,7 @@ public partial class UI : Control {
         }
 
         statusLabel.Text = $"Status: Successfully read {allPearls.Count} pearls";
-        
+
         try {
             speed = speedInput.Text.ToFloat();
         }
@@ -288,7 +292,7 @@ public partial class UI : Control {
         }).ToList();
 
         inaccessiblePearls = allPearls.Where(x => !accessiblePearls.Contains(x)).Select(x => x.id).ToList();
-        
+
         DisplayPearls();
         FreecamView();
 
@@ -306,18 +310,27 @@ public partial class UI : Control {
             };
             startButton.Show();
         }
-        
+
         DisplayPath();
         CollectNextPearl();
     }
 
     private void Start() {
+        if (inProgress) {
+            moving = !moving;
+            startButton.Text = moving ? "Pause" : "Play";
+            return;
+        }
+        
         if (path.Count < 1) {
             statusLabel.Text = "Error: Nowhere to go";
             return;
         }
+
         currentPos = urhajo.Position;
+        inProgress = true;
         moving = true;
+        startButton.Text = "Pause";
     }
 
     private static List<Pearl> CalculatePath(List<Pearl> pearls, double maxTravel) {
@@ -382,7 +395,7 @@ public partial class UI : Control {
         foreach (var child in pearlContainer.GetChildren()) {
             child.QueueFree();
         }
-        
+
         poolX = allPearls.Max(x => x.x) + padding;
         poolY = allPearls.Max(x => x.y) + padding;
         poolZ = allPearls.Max(x => x.z) + padding;
@@ -429,18 +442,70 @@ public partial class UI : Control {
 
             pearlContainer.AddChild(instance);
         }
+
         pool.Show();
     }
 
     private void DisplayPath() {
         var pearlInstances = pearlContainer.GetChildren();
-        
-        foreach (var pearl in path) {
+
+        var i = -1;
+        foreach (var pearl in path.Concat(new[] {
+                     new Pearl {
+                         id = 0,
+                         e = 0,
+                         x = 0,
+                         y = 0,
+                         z = 0
+                     }
+                 })) {
+            i++;
             var child = pearlInstances.ElementAt(pearl.id);
             var mesh = child.GetNode<MeshInstance3D>("MeshInstance3D");
             mesh.MaterialOverride = new StandardMaterial3D {
-                AlbedoColor = Color.Color8(255, 38, 38)
+                AlbedoColor = Color.Color8(145, 22, 22)
             };
+
+            var vec1 = Vector3.Zero;
+            if (i > 0) {
+                var prev = path[i - 1];
+                vec1 = new Vector3 {
+                    X = -prev.x,
+                    Y = -prev.y,
+                    Z = prev.z
+                };
+            }
+
+            var vec2 = new Vector3 {
+                X = -pearl.x,
+                Y = -pearl.y,
+                Z = pearl.z
+            };
+            var mean = (vec2 + vec1) / new Vector3 {
+                X = 2,
+                Y = 2,
+                Z = 2
+            };
+            var scale = (vec2 - vec1).Length();
+
+            var instance = (lineScene.Instantiate() as Node3D)!;
+            instance.Position = mean;
+            instance.Scale = new Vector3 {
+                X = 1,
+                Y = 1,
+                Z = scale
+            };
+
+            var absDot = Math.Abs((vec2 - vec1).Normalized().Dot(Vector3.Up));
+            const float epsilon = 1e-6f;
+            var upVec = absDot is > epsilon and < 1 - epsilon ? Vector3.Up : Vector3.Forward;
+            instance.LookAtFromPosition(mean, vec2, upVec);
+
+            mesh = instance.GetNode<MeshInstance3D>("LineMesh");
+            mesh.MaterialOverride = new StandardMaterial3D {
+                AlbedoColor = Color.Color8(145, 22, 22)
+            };
+            lineContainer.AddChild(instance);
         }
     }
 
@@ -456,17 +521,30 @@ public partial class UI : Control {
                 Z = path[collected].z
             };
             var nextPearlInstance = pearlContainer.GetChildren().ElementAt(path[collected].id);
-            var nextMesh = nextPearlInstance.GetNode<MeshInstance3D>("MeshInstance3D");
-            nextMesh.MaterialOverride = new StandardMaterial3D {
+            var nextPearlMesh = nextPearlInstance.GetNode<MeshInstance3D>("MeshInstance3D");
+            nextPearlMesh.MaterialOverride = new StandardMaterial3D {
                 AlbedoColor = Color.Color8(230, 168, 0)
             };
         }
+        
+        var nextLineInstance = lineContainer.GetChildren().ElementAt(collected);
+        var nextLineMesh = nextLineInstance.GetNode<MeshInstance3D>("LineMesh");
+        nextLineMesh.MaterialOverride = new StandardMaterial3D {
+            AlbedoColor = Color.Color8(230, 168, 0)
+        };
+
         urhajo.LookAt(currentTarget);
 
         if (collected == 0) return;
-        var previousPearlInstance = pearlContainer.GetChildren().ElementAt(path[collected - 1].id);
-        var mesh = previousPearlInstance.GetNode<MeshInstance3D>("MeshInstance3D");
-        mesh.MaterialOverride = new StandardMaterial3D {
+        var prevPearlInstance = pearlContainer.GetChildren().ElementAt(path[collected - 1].id);
+        var prevPearlMesh = prevPearlInstance.GetNode<MeshInstance3D>("MeshInstance3D");
+        prevPearlMesh.MaterialOverride = new StandardMaterial3D {
+            AlbedoColor = Color.Color8(0, 119, 255)
+        };
+        
+        var prevLineInstance = lineContainer.GetChildren().ElementAt(collected - 1);
+        var prevLineMesh = prevLineInstance.GetNode<MeshInstance3D>("LineMesh");
+        prevLineMesh.MaterialOverride = new StandardMaterial3D {
             AlbedoColor = Color.Color8(0, 119, 255)
         };
     }
@@ -516,13 +594,13 @@ public partial class UI : Control {
         fpsCamera.Current = false;
         tpsCamera.Current = false;
     }
-    
+
     private void FpsView() {
         fpsCamera.Current = true;
         freeCamera.Current = false;
         tpsCamera.Current = false;
     }
-    
+
     private void TpsView() {
         tpsCamera.Current = true;
         freeCamera.Current = false;
