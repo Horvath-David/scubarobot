@@ -1,7 +1,7 @@
 [gd_scene load_steps=16 format=3 uid="uid://bvi78i7ieexns"]
 
 [ext_resource type="Script" path="res://scripts/UI.cs" id="1_8w7hb"]
-[ext_resource type="FontFile" uid="uid://64p14fh458ki" path="res://assets/JetBrainsMono-Medium.ttf" id="2_u6n4n"]
+[ext_resource type="FontFile" uid="uid://ot714mh2to8s" path="res://assets/JetBrainsMono-Medium.ttf" id="2_u6n4n"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7fja"]
 content_margin_left = 0.0
@@ -316,7 +316,9 @@ offset_left = 277.0
 offset_top = 35.0
 offset_right = 498.0
 offset_bottom = 51.0
-value = 80.0
+max_value = 1.0
+step = 0.001
+value = 0.25
 
 [node name="MusicPanel" type="Panel" parent="BottomPanel"]
 layout_mode = 1
