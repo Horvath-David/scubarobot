@@ -1,7 +1,7 @@
-[gd_scene load_steps=16 format=3 uid="uid://bvi78i7ieexns"]
+[gd_scene load_steps=21 format=3 uid="uid://bvi78i7ieexns"]
 
 [ext_resource type="Script" path="res://scripts/UI.cs" id="1_8w7hb"]
-[ext_resource type="FontFile" uid="uid://64p14fh458ki" path="res://assets/fonts/JetBrainsMono-Medium.ttf" id="2_s1hjx"]
+[ext_resource type="FontFile" uid="uid://7ce1ebfu337b" path="res://assets/fonts/JetBrainsMono-Medium.ttf" id="2_s1hjx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7fja"]
 content_margin_left = 0.0
@@ -126,11 +126,37 @@ _data = {
 "slide_in": SubResource("Animation_dd1qu")
 }
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_84yt2"]
+bg_color = Color(0.101961, 0.101961, 0.101961, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4cmxn"]
+bg_color = Color(0.101961, 0.101961, 0.101961, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="Theme" id="Theme_bepvr"]
+/styles/panel = SubResource("StyleBoxFlat_84yt2")
+Control/styles/panel = SubResource("StyleBoxFlat_4cmxn")
+
 [sub_resource type="Theme" id="Theme_5d71c"]
 default_font_size = 23
 
 [sub_resource type="Theme" id="Theme_udlrb"]
 default_font_size = 23
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_37x3e"]
+bg_color = Color(0.101961, 0.101961, 0.101961, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+
+[sub_resource type="Theme" id="Theme_7q5sg"]
+Control/styles/panel = SubResource("StyleBoxFlat_37x3e")
 
 [sub_resource type="LabelSettings" id="LabelSettings_widry"]
 font_size = 30
@@ -292,6 +318,8 @@ offset_left = -521.945
 offset_top = -197.0
 offset_right = -7.94501
 offset_bottom = -114.0
+grow_vertical = 0
+theme = SubResource("Theme_bepvr")
 
 [node name="PauseUnpauseMusic" type="Button" parent="BottomPanel/MusicButtons"]
 layout_mode = 0
@@ -334,6 +362,7 @@ offset_top = -148.0
 offset_right = 88.0
 offset_bottom = -50.0
 grow_vertical = 0
+theme = SubResource("Theme_7q5sg")
 metadata/_edit_use_anchors_ = true
 
 [node name="Button" type="Button" parent="BottomPanel/MusicPanel"]
