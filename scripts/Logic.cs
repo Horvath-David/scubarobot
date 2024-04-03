@@ -106,7 +106,7 @@ public partial class Logic : Control {
         urhajo.GetNode<AnimationPlayer>("AnimationPlayer").Play("propeller");
 
         speedInput.Text = "1";
-        timeInput.Text = "150";
+        timeInput.Text = "1";
         try {
             pearlsInput.Text = File.ReadAllText("gyongyok.txt");
         }
