@@ -464,7 +464,7 @@ public partial class Logic : Control {
 
             if (inaccessiblePearls.Contains(pearl.id)) {
                 mesh.MaterialOverride = new StandardMaterial3D {
-                    AlbedoColor = Color.Color8(69, 69, 69)
+                    AlbedoColor = Color.Color8(0, 0, 0)
                 };
             }
 
