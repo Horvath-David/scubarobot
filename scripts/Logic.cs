@@ -101,6 +101,9 @@ public partial class Logic : Control {
         freeCamera = GetNode<Camera3D>("../3d/FreeCamera");
         fpsCamera = GetNode<Camera3D>("../3d/Urhajo/FpsCamera");
         tpsCamera = GetNode<Camera3D>("../3d/Urhajo/TpsCamera");
+        
+        GetNode<AnimationPlayer>("../3d/Intro/AnimationPlayer").Play("intro_camera");
+        urhajo.GetNode<AnimationPlayer>("AnimationPlayer").Play("propeller");
 
         speedInput.Text = "1";
         timeInput.Text = "150";
