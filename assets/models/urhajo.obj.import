@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://ym23jroetclf"
+path="res://.godot/imported/urhajo.obj-6ec5cbb2e696483e36df402679de1637.mesh"
+
+[deps]
+
+files=["res://.godot/imported/urhajo.obj-6ec5cbb2e696483e36df402679de1637.mesh"]
+
+source_file="res://assets/models/urhajo.obj"
+dest_files=["res://.godot/imported/urhajo.obj-6ec5cbb2e696483e36df402679de1637.mesh", "res://.godot/imported/urhajo.obj-6ec5cbb2e696483e36df402679de1637.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false
