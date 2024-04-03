@@ -180,12 +180,7 @@ public partial class UI : Control {
     }
 
     private void SetMusicVol(float vol) {
-        if (vol == 0) {
-            musicPlayer.VolumeDb = float.NegativeInfinity;
-            return;
-        }
-
-        musicPlayer.VolumeDb = (vol - 100) / 4;
+        musicPlayer.VolumeDb = (float)(10.0 * Math.Log(vol));
     }
 
     private async void ChangeMusic() {
