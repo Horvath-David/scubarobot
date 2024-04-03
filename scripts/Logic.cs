@@ -464,7 +464,9 @@ public partial class Logic : Control {
 
             if (inaccessiblePearls.Contains(pearl.id)) {
                 mesh.MaterialOverride = new StandardMaterial3D {
-                    AlbedoColor = Color.Color8(0, 0, 0)
+                    AlbedoColor = Color.Color8(0, 0, 0),
+                    Metallic = 0.2f,
+                    Roughness = 0.15f
                 };
             }
 
@@ -491,7 +493,9 @@ public partial class Logic : Control {
             var child = pearlInstances.ElementAt(pearl.id);
             var mesh = child.GetNode<MeshInstance3D>("MeshInstance3D");
             mesh.MaterialOverride = new StandardMaterial3D {
-                AlbedoColor = Color.Color8(145, 22, 22)
+                AlbedoColor = Color.Color8(145, 22, 22),
+                Metallic = 0.2f,
+                Roughness = 0.15f
             };
 
             var vec1 = Vector3.Zero;
@@ -531,7 +535,8 @@ public partial class Logic : Control {
 
             mesh = instance.GetNode<MeshInstance3D>("LineMesh");
             mesh.MaterialOverride = new StandardMaterial3D {
-                AlbedoColor = Color.Color8(145, 22, 22)
+                AlbedoColor = Color.Color8(145, 22, 22, 160),
+                Transparency = BaseMaterial3D.TransparencyEnum.Alpha
             };
             lineContainer.AddChild(instance);
         }
@@ -551,14 +556,17 @@ public partial class Logic : Control {
             var nextPearlInstance = pearlContainer.GetChildren().ElementAt(path[collected].id);
             var nextPearlMesh = nextPearlInstance.GetNode<MeshInstance3D>("MeshInstance3D");
             nextPearlMesh.MaterialOverride = new StandardMaterial3D {
-                AlbedoColor = Color.Color8(230, 168, 0)
+                AlbedoColor = Color.Color8(230, 168, 0),
+                Metallic = 0.2f,
+                Roughness = 0.15f
             };
         }
         
         var nextLineInstance = lineContainer.GetChildren().ElementAt(collected);
         var nextLineMesh = nextLineInstance.GetNode<MeshInstance3D>("LineMesh");
         nextLineMesh.MaterialOverride = new StandardMaterial3D {
-            AlbedoColor = Color.Color8(230, 168, 0)
+            AlbedoColor = Color.Color8(230, 168, 0, 160),
+            Transparency = BaseMaterial3D.TransparencyEnum.Alpha
         };
 
         urhajo.LookAt(currentTarget);
@@ -567,13 +575,16 @@ public partial class Logic : Control {
         var prevPearlInstance = pearlContainer.GetChildren().ElementAt(path[collected - 1].id);
         var prevPearlMesh = prevPearlInstance.GetNode<MeshInstance3D>("MeshInstance3D");
         prevPearlMesh.MaterialOverride = new StandardMaterial3D {
-            AlbedoColor = Color.Color8(0, 119, 255)
+            AlbedoColor = Color.Color8(0, 119, 255),
+            Metallic = 0.2f,
+            Roughness = 0.15f
         };
         
         var prevLineInstance = lineContainer.GetChildren().ElementAt(collected - 1);
         var prevLineMesh = prevLineInstance.GetNode<MeshInstance3D>("LineMesh");
         prevLineMesh.MaterialOverride = new StandardMaterial3D {
-            AlbedoColor = Color.Color8(0, 119, 255)
+            AlbedoColor = Color.Color8(0, 119, 255, 160),
+            Transparency = BaseMaterial3D.TransparencyEnum.Alpha
         };
     }
 

@@ -3,6 +3,9 @@
 [sub_resource type="SphereMesh" id="SphereMesh_dl0pp"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bxxwk"]
+albedo_color = Color(0.690196, 0.690196, 0.690196, 1)
+metallic = 0.2
+roughness = 0.15
 emission = Color(1, 1, 1, 1)
 
 [node name="Pearl" type="Node3D"]
