@@ -1,7 +1,7 @@
 [gd_scene load_steps=16 format=3 uid="uid://bvi78i7ieexns"]
 
 [ext_resource type="Script" path="res://scripts/UI.cs" id="1_8w7hb"]
-[ext_resource type="FontFile" uid="uid://ot714mh2to8s" path="res://assets/JetBrainsMono-Medium.ttf" id="2_u6n4n"]
+[ext_resource type="FontFile" uid="uid://64p14fh458ki" path="res://assets/fonts/JetBrainsMono-Medium.ttf" id="2_s1hjx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7fja"]
 content_margin_left = 0.0
@@ -577,7 +577,7 @@ offset_right = 225.0
 offset_bottom = 125.0
 grow_horizontal = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_u6n4n")
+theme_override_fonts/font = ExtResource("2_s1hjx")
 theme_override_font_sizes/font_size = 24
 text = "12/43 points  -  12.4/78.6 seconds"
 

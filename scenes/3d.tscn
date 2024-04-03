@@ -1,7 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://d3672npu6aala"]
+[gd_scene load_steps=14 format=3 uid="uid://d3672npu6aala"]
 
 [ext_resource type="Script" path="res://scripts/addons/camera.gd" id="1_554ia"]
-[ext_resource type="Shader" path="res://scenes/3d.gdshader" id="2_c48sy"]
+[ext_resource type="Shader" path="res://assets/shaders/3d.gdshader" id="2_bgxqv"]
 [ext_resource type="PackedScene" uid="uid://k55rxx6s8c5y" path="res://prefabs/urhajo.tscn" id="3_dju2y"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_w4ktd"]
@@ -24,7 +24,7 @@ ambient_light_sky_contribution = 0.68
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cxmmb"]
 render_priority = 0
 next_pass = SubResource("ShaderMaterial_rw0ee")
-shader = ExtResource("2_c48sy")
+shader = ExtResource("2_bgxqv")
 shader_parameter/albedo = Color(0, 0, 0, 0.329412)
 shader_parameter/point_size = 1.0
 shader_parameter/roughness = 1.0
@@ -37,7 +37,14 @@ shader_parameter/uv2_scale = Vector3(1, 1, 1)
 shader_parameter/uv2_offset = Vector3(0, 0, 0)
 
 [sub_resource type="BoxMesh" id="BoxMesh_pk3my"]
+lightmap_size_hint = Vector2i(14, 21)
 material = SubResource("ShaderMaterial_cxmmb")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ktsff"]
+albedo_color = Color(0.152941, 0.152941, 0.152941, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_kf07w"]
+material = SubResource("StandardMaterial3D_ktsff")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o2fjv"]
 albedo_color = Color(0, 0.466667, 1, 1)
@@ -70,6 +77,35 @@ transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)
 transform = Transform3D(100, 0, 0, 0, 20, 0, 0, 0, 70, -50, -10, 35)
 visible = false
 mesh = SubResource("BoxMesh_pk3my")
+
+[node name="Left" type="MeshInstance3D" parent="Pool"]
+transform = Transform3D(3.7749e-08, -1, -2.18557e-08, 0, -4.37114e-08, 0.5, -0.5, -7.54979e-08, -1.65006e-15, 0.5, 0, 0)
+visible = false
+mesh = SubResource("PlaneMesh_kf07w")
+skeleton = NodePath("../Bottom")
+
+[node name="Right" type="MeshInstance3D" parent="Pool"]
+transform = Transform3D(-2.18557e-08, 1, 0, -0.5, -4.37114e-08, 0, 0, 0, 0.5, -0.5, 0, 0)
+visible = false
+mesh = SubResource("PlaneMesh_kf07w")
+skeleton = NodePath("../Bottom")
+
+[node name="Front" type="MeshInstance3D" parent="Pool"]
+transform = Transform3D(0.5, 4.23483e-08, -9.2555e-16, 0, -4.37114e-08, -0.5, -2.11741e-08, 1, -2.18557e-08, 0, 0, -0.5)
+visible = false
+mesh = SubResource("PlaneMesh_kf07w")
+skeleton = NodePath("../Back")
+
+[node name="Back" type="MeshInstance3D" parent="Pool"]
+transform = Transform3D(-0.5, -1.50996e-07, 3.30012e-15, 0, -4.37114e-08, -0.5, 7.54979e-08, -1, 2.18557e-08, 0, 0, 0.5)
+visible = false
+mesh = SubResource("PlaneMesh_kf07w")
+skeleton = NodePath("../Bottom")
+
+[node name="Bottom" type="MeshInstance3D" parent="Pool"]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, -0.5, 0)
+visible = false
+mesh = SubResource("PlaneMesh_kf07w")
 
 [node name="Urhajo" parent="." instance=ExtResource("3_dju2y")]
 transform = Transform3D(-2.18557e-07, 0, 5, 0, 5, 0, -5, 0, -2.18557e-07, 0, 0, 0)

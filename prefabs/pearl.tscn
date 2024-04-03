@@ -3,6 +3,7 @@
 [sub_resource type="SphereMesh" id="SphereMesh_dl0pp"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bxxwk"]
+emission = Color(1, 1, 1, 1)
 
 [node name="Pearl" type="Node3D"]
 

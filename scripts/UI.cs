@@ -146,6 +146,7 @@ public partial class UI : Control {
                     AlbedoColor = Color.Color8(0, 119, 255)
                 };
                 startButton.Disabled = true;
+                urhajo.GetNode<AnimationPlayer>("AnimationPlayer").Pause();
                 return;
             }
 
@@ -236,6 +237,7 @@ public partial class UI : Control {
         startButton.Text = "Start";
         startButton.Disabled = false;
         collected = -1;
+        urhajo.GetNode<AnimationPlayer>("AnimationPlayer").Stop();
         foreach (var child in pearlContainer.GetChildren()) {
             child.Free();
         }
@@ -327,6 +329,12 @@ public partial class UI : Control {
         if (inProgress) {
             moving = !moving;
             startButton.Text = moving ? "Pause" : "Play";
+            if (moving) {
+                urhajo.GetNode<AnimationPlayer>("AnimationPlayer").Play("propeller");
+            }
+            else {
+                urhajo.GetNode<AnimationPlayer>("AnimationPlayer").Pause();
+            }
             return;
         }
         
@@ -339,6 +347,7 @@ public partial class UI : Control {
         inProgress = true;
         moving = true;
         startButton.Text = "Pause";
+        urhajo.GetNode<AnimationPlayer>("AnimationPlayer").Play("propeller");
     }
 
     private static List<Pearl> CalculatePath(List<Pearl> pearls, double maxTravel) {
