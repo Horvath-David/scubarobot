@@ -7,7 +7,7 @@ using Godot;
 
 namespace hunter.scripts;
 
-public partial class UI : Control {
+public partial class Logic : Control {
     [Export] private Label statusLabel;
     [Export] private Label progressLabel;
     [Export] private Button loadButton;
@@ -237,6 +237,7 @@ public partial class UI : Control {
         startButton.Text = "Start";
         startButton.Disabled = false;
         collected = -1;
+        path = [];
         urhajo.GetNode<AnimationPlayer>("AnimationPlayer").Stop();
         foreach (var child in pearlContainer.GetChildren()) {
             child.Free();
@@ -258,7 +259,7 @@ public partial class UI : Control {
                 };
             }).ToList();
         }
-        catch (Exception e) {
+        catch (Exception) {
             statusLabel.Text = "Error: Invalid \"gyongyok.txt\"";
             return;
         }
@@ -268,9 +269,14 @@ public partial class UI : Control {
         try {
             speed = speedInput.Text.ToFloat();
         }
-        catch (Exception _) {
-            statusLabel.Text = "Error: Invalid speed";
-            return;
+        catch (Exception) {
+            try {
+                speed = speedInput.Text.Replace(".", ",").ToFloat();
+            }
+            catch (Exception) {
+                statusLabel.Text = "Error: Invalid speed";
+                return;
+            }
         }
 
         if (speed <= 0) {
@@ -281,9 +287,14 @@ public partial class UI : Control {
         try {
             time = timeInput.Text.ToFloat();
         }
-        catch (Exception _) {
-            statusLabel.Text = "Error: Invalid time";
-            return;
+        catch (Exception) {
+            try {
+                time = timeInput.Text.Replace(".", ",").ToFloat();
+            }
+            catch (Exception) {
+                statusLabel.Text = "Error: Invalid time";
+                return;
+            }
         }
         
         if (time <= 0) {
@@ -624,10 +635,6 @@ public partial class UI : Control {
         }
 
         var m = l / 2 / Math.Sin(DegToRad(fov / 2)) * Math.Sin(DegToRad(90 - fov / 2));
-
-        // GD.Print($"l: {l}");
-        // GD.Print($"fov: {fov}");
-        // GD.Print($"m: {m}");
 
         freeCamera.Position = new Vector3 {
             X = -(poolX / 2),

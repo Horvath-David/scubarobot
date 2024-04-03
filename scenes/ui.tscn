@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=3 uid="uid://bvi78i7ieexns"]
 
-[ext_resource type="Script" path="res://scripts/UI.cs" id="1_8w7hb"]
+[ext_resource type="Script" path="res://scripts/Logic.cs" id="1_8w7hb"]
 [ext_resource type="FontFile" uid="uid://64p14fh458ki" path="res://assets/fonts/JetBrainsMono-Medium.ttf" id="2_s1hjx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7fja"]
