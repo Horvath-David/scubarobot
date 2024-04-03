@@ -266,6 +266,7 @@ offset_left = 653.0
 offset_top = 15.0
 offset_right = 712.0
 offset_bottom = 46.0
+mouse_default_cursor_shape = 2
 text = "Edit"
 
 [node name="BottomPanel" type="Panel" parent="."]
@@ -298,6 +299,7 @@ offset_left = 147.0
 offset_top = 12.0
 offset_right = 267.0
 offset_bottom = 72.0
+mouse_default_cursor_shape = 2
 theme = SubResource("Theme_5d71c")
 text = "Pause"
 
@@ -307,6 +309,7 @@ offset_left = 19.0
 offset_top = 12.0
 offset_right = 139.0
 offset_bottom = 72.0
+mouse_default_cursor_shape = 2
 theme = SubResource("Theme_udlrb")
 text = "Next"
 
@@ -316,6 +319,7 @@ offset_left = 277.0
 offset_top = 35.0
 offset_right = 498.0
 offset_bottom = 51.0
+mouse_default_cursor_shape = 10
 max_value = 1.0
 step = 0.001
 value = 0.25
@@ -342,6 +346,7 @@ offset_top = 24.0
 offset_right = -19.0
 offset_bottom = 74.0
 grow_horizontal = 0
+mouse_default_cursor_shape = 2
 toggle_mode = true
 text = "♫"
 
@@ -414,6 +419,7 @@ offset_right = -5.0
 offset_bottom = 16.0
 grow_horizontal = 0
 grow_vertical = 2
+mouse_default_cursor_shape = 2
 text = "Load & calculate"
 
 [node name="StartButton" type="Button" parent="BottomPanel/HSplitContainer/Control"]
@@ -430,6 +436,7 @@ offset_right = -5.34497
 offset_bottom = 16.0
 grow_horizontal = 0
 grow_vertical = 2
+mouse_default_cursor_shape = 2
 text = "Start"
 
 [node name="PearlsPanel" type="Panel" parent="."]
@@ -480,6 +487,7 @@ offset_right = -18.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_default_cursor_shape = 2
 text = "Save"
 
 [node name="CameraSelectorPanel" type="Panel" parent="."]
@@ -504,6 +512,7 @@ offset_left = 8.0
 offset_top = 37.0
 offset_right = 119.0
 offset_bottom = 68.0
+mouse_default_cursor_shape = 2
 text = "Freecam"
 
 [node name="FpsButton" type="Button" parent="CameraSelectorPanel"]
@@ -512,6 +521,7 @@ offset_left = 8.0
 offset_top = 76.0
 offset_right = 119.0
 offset_bottom = 107.0
+mouse_default_cursor_shape = 2
 text = "First person"
 
 [node name="TpsButton" type="Button" parent="CameraSelectorPanel"]
@@ -520,6 +530,7 @@ offset_left = 8.0
 offset_top = 115.0
 offset_right = 119.0
 offset_bottom = 146.0
+mouse_default_cursor_shape = 2
 text = "Third person"
 
 [node name="ControlsHintPanel" type="Panel" parent="."]
