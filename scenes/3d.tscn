@@ -1,23 +1,27 @@
-[gd_scene load_steps=14 format=3 uid="uid://d3672npu6aala"]
+[gd_scene load_steps=18 format=3 uid="uid://d3672npu6aala"]
 
 [ext_resource type="Script" path="res://scripts/addons/camera.gd" id="1_554ia"]
 [ext_resource type="Shader" path="res://assets/shaders/3d.gdshader" id="2_bgxqv"]
+[ext_resource type="Texture2D" uid="uid://p0a5b53qhgmc" path="res://assets/sunflowers_puresky_4k.hdr" id="2_i5xbd"]
 [ext_resource type="PackedScene" uid="uid://k55rxx6s8c5y" path="res://prefabs/urhajo.tscn" id="3_dju2y"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_w4ktd"]
-sun_angle_max = 172.22
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_y40tr"]
+panorama = ExtResource("2_i5xbd")
 
 [sub_resource type="Sky" id="Sky_rwb1k"]
-sky_material = SubResource("ProceduralSkyMaterial_w4ktd")
+sky_material = SubResource("PanoramaSkyMaterial_y40tr")
 process_mode = 1
 
 [sub_resource type="Environment" id="Environment_381fh"]
 background_mode = 2
 sky = SubResource("Sky_rwb1k")
 sky_custom_fov = 75.0
+sky_rotation = Vector3(0, 3.59887, 0)
 ambient_light_source = 3
 ambient_light_color = Color(0.639216, 0.639216, 0.639216, 1)
-ambient_light_sky_contribution = 0.68
+tonemap_mode = 1
+tonemap_exposure = 5.88
+tonemap_white = 16.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rw0ee"]
 
@@ -52,15 +56,54 @@ albedo_color = Color(0, 0.466667, 1, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_nfqbh"]
 material = SubResource("StandardMaterial3D_o2fjv")
 
+[sub_resource type="Animation" id="Animation_5nx65"]
+resource_name = "intro_camera"
+length = 15.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 6.28319, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_7gknk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jjbvx"]
+_data = {
+"RESET": SubResource("Animation_7gknk"),
+"intro_camera": SubResource("Animation_5nx65")
+}
+
 [node name="3D" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866025, -0.15948, 0.473884, 0, 0.947768, 0.318959, -0.5, 0.276227, -0.820791, 0, 0, 0)
+transform = Transform3D(-0.938137, -0.110445, 0.328179, -1.9677e-08, 0.947768, 0.31896, -0.346265, 0.299228, -0.889136, 0, 0, 0)
+light_color = Color(0.952941, 0.980392, 0.984314, 1)
+light_energy = 0.01
 shadow_enabled = true
 
 [node name="FreeCamera" type="Camera3D" parent="."]
 transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -6, 0, -5)
-current = true
 near = 0.001
 far = 10000.0
 script = ExtResource("1_554ia")
@@ -113,3 +156,16 @@ transform = Transform3D(-2.18557e-07, 0, 5, 0, 5, 0, -5, 0, -2.18557e-07, 0, 0, 
 [node name="OriginCube" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
 mesh = SubResource("BoxMesh_nfqbh")
+
+[node name="Intro" type="Node3D" parent="."]
+
+[node name="IntroCamera" type="Camera3D" parent="Intro"]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -6, 0, -6)
+current = true
+near = 0.001
+far = 10000.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Intro"]
+libraries = {
+"": SubResource("AnimationLibrary_jjbvx")
+}

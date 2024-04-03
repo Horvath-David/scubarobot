@@ -1,6 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://djrjdoimrtm6w"]
+[gd_scene load_steps=3 format=3 uid="uid://djrjdoimrtm6w"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ryyf7"]
+transparency = 4
+depth_draw_mode = 2
+no_depth_test = true
+albedo_color = Color(0, 0.466667, 1, 0.611765)
+emission_enabled = true
+emission = Color(0, 0.466667, 1, 1)
+emission_energy_multiplier = 5.0
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_dybop"]
+material = SubResource("StandardMaterial3D_ryyf7")
 top_radius = 0.06
 bottom_radius = 0.06
 height = 1.0

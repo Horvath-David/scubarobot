@@ -1,7 +1,7 @@
-[gd_scene load_steps=21 format=3 uid="uid://bvi78i7ieexns"]
+[gd_scene load_steps=18 format=3 uid="uid://bvi78i7ieexns"]
 
-[ext_resource type="Script" path="res://scripts/UI.cs" id="1_8w7hb"]
-[ext_resource type="FontFile" uid="uid://7ce1ebfu337b" path="res://assets/fonts/JetBrainsMono-Medium.ttf" id="2_s1hjx"]
+[ext_resource type="Script" path="res://scripts/Logic.cs" id="1_8w7hb"]
+[ext_resource type="FontFile" uid="uid://64p14fh458ki" path="res://assets/fonts/JetBrainsMono-Medium.ttf" id="2_s1hjx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7fja"]
 content_margin_left = 0.0
@@ -126,37 +126,24 @@ _data = {
 "slide_in": SubResource("Animation_dd1qu")
 }
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_84yt2"]
-bg_color = Color(0.101961, 0.101961, 0.101961, 0.6)
-corner_radius_top_left = 3
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tb1xw"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
+corner_detail = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4cmxn"]
-bg_color = Color(0.101961, 0.101961, 0.101961, 0.6)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-
-[sub_resource type="Theme" id="Theme_bepvr"]
-/styles/panel = SubResource("StyleBoxFlat_84yt2")
-Control/styles/panel = SubResource("StyleBoxFlat_4cmxn")
+[sub_resource type="Theme" id="Theme_p8dt6"]
+Panel/styles/panel = SubResource("StyleBoxFlat_tb1xw")
 
 [sub_resource type="Theme" id="Theme_5d71c"]
 default_font_size = 23
 
 [sub_resource type="Theme" id="Theme_udlrb"]
 default_font_size = 23
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_37x3e"]
-bg_color = Color(0.101961, 0.101961, 0.101961, 0.6)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-
-[sub_resource type="Theme" id="Theme_7q5sg"]
-Control/styles/panel = SubResource("StyleBoxFlat_37x3e")
 
 [sub_resource type="LabelSettings" id="LabelSettings_widry"]
 font_size = 30
@@ -292,7 +279,6 @@ offset_left = 653.0
 offset_top = 15.0
 offset_right = 712.0
 offset_bottom = 46.0
-mouse_default_cursor_shape = 2
 text = "Edit"
 
 [node name="BottomPanel" type="Panel" parent="."]
@@ -318,8 +304,7 @@ offset_left = -521.945
 offset_top = -197.0
 offset_right = -7.94501
 offset_bottom = -114.0
-grow_vertical = 0
-theme = SubResource("Theme_bepvr")
+theme = SubResource("Theme_p8dt6")
 
 [node name="PauseUnpauseMusic" type="Button" parent="BottomPanel/MusicButtons"]
 layout_mode = 0
@@ -327,7 +312,6 @@ offset_left = 147.0
 offset_top = 12.0
 offset_right = 267.0
 offset_bottom = 72.0
-mouse_default_cursor_shape = 2
 theme = SubResource("Theme_5d71c")
 text = "Pause"
 
@@ -337,7 +321,6 @@ offset_left = 19.0
 offset_top = 12.0
 offset_right = 139.0
 offset_bottom = 72.0
-mouse_default_cursor_shape = 2
 theme = SubResource("Theme_udlrb")
 text = "Next"
 
@@ -347,7 +330,6 @@ offset_left = 277.0
 offset_top = 35.0
 offset_right = 498.0
 offset_bottom = 51.0
-mouse_default_cursor_shape = 10
 max_value = 1.0
 step = 0.001
 value = 0.25
@@ -362,7 +344,7 @@ offset_top = -148.0
 offset_right = 88.0
 offset_bottom = -50.0
 grow_vertical = 0
-theme = SubResource("Theme_7q5sg")
+theme = SubResource("Theme_p8dt6")
 metadata/_edit_use_anchors_ = true
 
 [node name="Button" type="Button" parent="BottomPanel/MusicPanel"]
@@ -375,7 +357,6 @@ offset_top = 24.0
 offset_right = -19.0
 offset_bottom = 74.0
 grow_horizontal = 0
-mouse_default_cursor_shape = 2
 toggle_mode = true
 text = "♫"
 
@@ -448,7 +429,6 @@ offset_right = -5.0
 offset_bottom = 16.0
 grow_horizontal = 0
 grow_vertical = 2
-mouse_default_cursor_shape = 2
 text = "Load & calculate"
 
 [node name="StartButton" type="Button" parent="BottomPanel/HSplitContainer/Control"]
@@ -465,7 +445,6 @@ offset_right = -5.34497
 offset_bottom = 16.0
 grow_horizontal = 0
 grow_vertical = 2
-mouse_default_cursor_shape = 2
 text = "Start"
 
 [node name="PearlsPanel" type="Panel" parent="."]
@@ -516,7 +495,6 @@ offset_right = -18.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
-mouse_default_cursor_shape = 2
 text = "Save"
 
 [node name="CameraSelectorPanel" type="Panel" parent="."]
@@ -541,7 +519,6 @@ offset_left = 8.0
 offset_top = 37.0
 offset_right = 119.0
 offset_bottom = 68.0
-mouse_default_cursor_shape = 2
 text = "Freecam"
 
 [node name="FpsButton" type="Button" parent="CameraSelectorPanel"]
@@ -550,7 +527,6 @@ offset_left = 8.0
 offset_top = 76.0
 offset_right = 119.0
 offset_bottom = 107.0
-mouse_default_cursor_shape = 2
 text = "First person"
 
 [node name="TpsButton" type="Button" parent="CameraSelectorPanel"]
@@ -559,7 +535,6 @@ offset_left = 8.0
 offset_top = 115.0
 offset_right = 119.0
 offset_bottom = 146.0
-mouse_default_cursor_shape = 2
 text = "Third person"
 
 [node name="ControlsHintPanel" type="Panel" parent="."]
